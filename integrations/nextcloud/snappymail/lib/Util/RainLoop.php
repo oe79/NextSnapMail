@@ -15,7 +15,8 @@ class RainLoop
 	 */
 	public static function import() : array
 	{
-		$dir = \rtrim(\trim(\OC::$server->getSystemConfig()->getValue('datadirectory', '')), '\\/');
+		$config = \OC::$server->get(\OCP\IConfig::class);
+		$dir = \rtrim(\trim($config->getSystemValue('datadirectory', '')), '\\/');
 		$dir_snappy = $dir . '/appdata_snappymail/';
 		$dir_rainloop = $dir . '/rainloop-storage';
 		$result = [];

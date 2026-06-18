@@ -37,6 +37,12 @@ class InstallStep implements IRepairStep
 		$app_dir = \dirname(\dirname(__DIR__)) . '/app';
 //		$app_dir = \rtrim(APP_INDEX_ROOT_PATH, '\\/');
 
+		$bundledPlugin = $app_dir . '/bundled-plugins/nextcloud';
+		if (\is_dir($bundledPlugin)) {
+			$output->info('Install bundled extension: nextcloud');
+			static::copyDirectory($bundledPlugin, APP_PLUGINS_PATH . 'nextcloud');
+		}
+
 		// https://github.com/the-djmaze/snappymail/issues/790#issuecomment-1366527884
 		if (!\file_exists($app_dir . '/.htaccess') && \file_exists($app_dir . '/_htaccess')) {
 			\rename($app_dir . '/_htaccess', $app_dir . '/.htaccess');
@@ -53,7 +59,7 @@ class InstallStep implements IRepairStep
 
 		if (!$oConfig->Get('webmail', 'app_path')) {
 			$output->info('Set config [webmail]app_path');
-			$oConfig->Set('webmail', 'app_path', \OC::$server->getAppManager()->getAppWebPath('snappymail') . '/app/');
+			$oConfig->Set('webmail', 'app_path', \OC::$server->get(\OCP\App\IAppManager::class)->getAppWebPath('snappymail') . '/app/');
 			$oConfig->Set('webmail', 'allow_languages_on_settings', false);
 			$oConfig->Set('login', 'allow_languages_on_login', false);
 			$bSave = true;
@@ -62,8 +68,11 @@ class InstallStep implements IRepairStep
 		if (!\is_dir(APP_PLUGINS_PATH . 'nextcloud')) {
 			$output->info('Install extension: nextcloud');
 			\SnappyMail\Repository::installPackage('plugin', 'nextcloud');
+		}
+
+		$aList = \SnappyMail\Repository::getEnabledPackagesNames();
+		if (!\in_array('nextcloud', $aList, true)) {
 			$oConfig->Set('plugins', 'enable', true);
-			$aList = \SnappyMail\Repository::getEnabledPackagesNames();
 			$aList[] = 'nextcloud';
 			$oConfig->Set('plugins', 'enabled_list', \implode(',', \array_unique($aList)));
 			$oConfig->Set('webmail', 'theme', 'NextcloudV25+');
@@ -132,6 +141,30 @@ class InstallStep implements IRepairStep
 			/** @var \Psr\Log\LoggerInterface $logger */
 			$logger = \OC::$server->get(\Psr\Log\LoggerInterface::class);
 			$logger->error("custom config error: " . $e->getMessage());
+		}
+	}
+
+	private static function copyDirectory(string $source, string $destination): void
+	{
+		if (!\is_dir($destination) && !\mkdir($destination, 0755, true) && !\is_dir($destination)) {
+			throw new \RuntimeException("Could not create directory {$destination}");
+		}
+
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
+		$prefixLength = \strlen($source) + 1;
+
+		foreach ($iterator as $item) {
+			$target = $destination . '/' . \substr($item->getPathname(), $prefixLength);
+			if ($item->isDir()) {
+				if (!\is_dir($target) && !\mkdir($target, 0755, true) && !\is_dir($target)) {
+					throw new \RuntimeException("Could not create directory {$target}");
+				}
+			} elseif (!\copy($item->getPathname(), $target)) {
+				throw new \RuntimeException("Could not copy {$target}");
+			}
 		}
 	}
 }

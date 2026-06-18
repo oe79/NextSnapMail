@@ -16,7 +16,8 @@ class PageController extends Controller
 	 */
 	public function index()
 	{
-		$config = \OC::$server->getConfig();
+		$config = \OC::$server->get(\OCP\IConfig::class);
+		$navigationManager = \OC::$server->get(\OCP\INavigationManager::class);
 
 		$bAdmin = false;
 		if (!empty($_SERVER['QUERY_STRING'])) {
@@ -28,7 +29,7 @@ class PageController extends Controller
 		}
 
 		if (!$bAdmin && $config->getAppValue('snappymail', 'snappymail-no-embed')) {
-			\OC::$server->getNavigationManager()->setActiveEntry('snappymail');
+			$navigationManager->setActiveEntry('snappymail');
 			\OCP\Util::addScript('snappymail', 'snappymail');
 			\OCP\Util::addStyle('snappymail', 'style');
 			SnappyMailHelper::startApp();
@@ -39,11 +40,11 @@ class PageController extends Controller
 			$csp = new ContentSecurityPolicy();
 			$csp->addAllowedFrameDomain("'self'");
 //			$csp->addAllowedFrameAncestorDomain("'self'");
-			$response->setContentSecurityPolicy($csp);
+			$response->setContentSecurityPolicy($csp->getPolicy());
 			return $response;
 		}
 
-		\OC::$server->getNavigationManager()->setActiveEntry('snappymail');
+		$navigationManager->setActiveEntry('snappymail');
 
 		\OCP\Util::addStyle('snappymail', 'embed');
 
@@ -83,7 +84,7 @@ class PageController extends Controller
 
 		$response = new TemplateResponse('snappymail', 'index_embed', $params);
 
-		$response->setContentSecurityPolicy($csp);
+		$response->setContentSecurityPolicy($csp->getPolicy());
 
 		return $response;
 	}

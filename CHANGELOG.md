@@ -1,3 +1,18 @@
+## NextSnapMail (unreleased)
+
+### Fixed
+
+- Restore application bootstrap and Nextcloud integration compatibility with
+  Nextcloud 34 by replacing removed `OC\Server` shortcut methods.
+- Decouple the app-specific content security policy from Nextcloud's internal
+  policy representation.
+
+### Changed
+
+- Bundle the required Nextcloud plugin with the app release instead of
+  downloading it from the former SnappyMail package repository.
+
+
 ## 2.38.2 – 2024-10-09
 ### Fixed
 - error '$index is not defined' in Settings > Accounts
