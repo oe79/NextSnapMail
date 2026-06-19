@@ -4,8 +4,8 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 {
 	const
 		NAME = 'Nextcloud',
-		VERSION = '2.38.2',
-		RELEASE  = '2026-06-18',
+		VERSION = '2.38.3',
+		RELEASE  = '2026-06-19',
 		CATEGORY = 'Integrations',
 		DESCRIPTION = 'Integrate with Nextcloud v20+',
 		REQUIRED = '2.38.0';
@@ -114,19 +114,46 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 			'success' => false,
 			'tempName' => ''
 		];
-		$sFile = $this->jsonParam('file', '');
-		$oFiles = \OCP\Files::getStorage('files');
-		if ($oFiles && $oFiles->is_file($sFile) && $fp = $oFiles->fopen($sFile, 'rb')) {
+		$rSource = null;
+		try {
+			$sFile = static::NormalizePath($this->jsonParam('file', ''));
+			$oNode = static::UserFolder()->get($sFile);
+			if (!$oNode instanceof \OCP\Files\File || !$oNode->isReadable()) {
+				throw new \RuntimeException('The selected Nextcloud file is not readable');
+			}
+
+			$rSource = $oNode->fopen('rb');
+			if (!\is_resource($rSource)) {
+				throw new \RuntimeException('The selected Nextcloud file could not be opened');
+			}
+
 			$oActions = \RainLoop\Api::Actions();
 			$oAccount = $oActions->getAccountFromToken();
-			if ($oAccount) {
-				$sSavedName = 'nextcloud-file-' . \sha1($sFile . \microtime());
-				if (!$oActions->FilesProvider()->PutFile($oAccount, $sSavedName, $fp)) {
-					$aResult['error'] = 'failed';
-				} else {
-					$aResult['tempName'] = $sSavedName;
-					$aResult['success'] = true;
-				}
+			if (!$oAccount) {
+				throw new \RuntimeException('No active mail account');
+			}
+
+			$sSavedName = 'nextcloud-file-' . \sha1($sFile . \microtime(true));
+			$oFilesProvider = $oActions->FilesProvider();
+			if (!$oFilesProvider->PutFile($oAccount, $sSavedName, $rSource)) {
+				throw new \RuntimeException('The selected Nextcloud file could not be copied');
+			}
+
+			$iSourceSize = (int) $oNode->getSize();
+			$iSavedSize = $oFilesProvider->FileSize($oAccount, $sSavedName);
+			if (false === $iSavedSize || $iSourceSize !== (int) $iSavedSize) {
+				$oFilesProvider->Clear($oAccount, $sSavedName);
+				throw new \RuntimeException('The copied file size does not match the Nextcloud file');
+			}
+
+			$aResult += static::FileMetadata($oNode);
+			$aResult['tempName'] = $sSavedName;
+			$aResult['success'] = true;
+		} catch (\Throwable $oException) {
+			$aResult['error'] = $oException->getMessage();
+		} finally {
+			if (\is_resource($rSource)) {
+				\fclose($rSource);
 			}
 		}
 		return $this->jsonResponse(__FUNCTION__, $aResult);
@@ -143,35 +170,39 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 			'filename' => '',
 			'success' => false
 		];
-		if ($sSaveFolder && !empty($aValues['folder']) && !empty($aValues['uid'])) {
-			$oActions = \RainLoop\Api::Actions();
-			$oMailClient = $oActions->MailClient();
-			if (!$oMailClient->IsLoggined()) {
-				$oAccount = $oActions->getAccountFromToken();
-				$oAccount->ImapConnectAndLogin($oActions->Plugins(), $oMailClient->ImapClient(), $oActions->Config());
+		if (!empty($aValues['folder']) && !empty($aValues['uid'])) {
+			try {
+				$sSaveFolder = static::NormalizePath($sSaveFolder, true);
+				$oTargetFolder = static::FolderAtPath($sSaveFolder);
+				$oActions = \RainLoop\Api::Actions();
+				$oMailClient = $oActions->MailClient();
+				if (!$oMailClient->IsLoggined()) {
+					$oAccount = $oActions->getAccountFromToken();
+					$oAccount->ImapConnectAndLogin($oActions->Plugins(), $oMailClient->ImapClient(), $oActions->Config());
+				}
+
+				$aResult['folder'] = $sSaveFolder;
+				$sFileName = \MailSo\Base\Utils::SecureFileName(
+					\mb_substr($this->jsonParam('filename', '') ?: \date('YmdHis'), 0, 100)
+				) . '.' . \md5($msgHash) . '.eml';
+				$sFileName = $oTargetFolder->getNonExistingName($sFileName);
+				$aResult['filename'] = $sFileName;
+
+				$oMailClient->MessageMimeStream(
+					function ($rResource) use ($oTargetFolder, $sFileName, &$aResult) {
+						if (\is_resource($rResource)) {
+							$oFile = $oTargetFolder->newFile($sFileName, $rResource);
+							$aResult += static::FileMetadata($oFile);
+							$aResult['success'] = true;
+						}
+					},
+					(string) $aValues['folder'],
+					(int) $aValues['uid'],
+					isset($aValues['mimeIndex']) ? (string) $aValues['mimeIndex'] : ''
+				);
+			} catch (\Throwable $oException) {
+				$aResult['error'] = $oException->getMessage();
 			}
-
-			$sSaveFolder = $sSaveFolder ?: 'Emails';
-			$oFiles = \OCP\Files::getStorage('files');
-			if ($oFiles) {
-				$oFiles->is_dir($sSaveFolder) || $oFiles->mkdir($sSaveFolder);
-			}
-			$aResult['folder'] = $sSaveFolder;
-			$aResult['filename'] = \MailSo\Base\Utils::SecureFileName(
-				\mb_substr($this->jsonParam('filename', '') ?: \date('YmdHis'), 0, 100)
-			) . '.' . \md5($msgHash) . '.eml';
-
-
-			$oMailClient->MessageMimeStream(
-				function ($rResource) use ($oFiles, $aResult) {
-					if (\is_resource($rResource)) {
-						$aResult['success'] = $oFiles->file_put_contents("{$aResult['folder']}/{$aResult['filename']}", $rResource);
-					}
-				},
-				(string) $aValues['folder'],
-				(int) $aValues['uid'],
-				isset($aValues['mimeIndex']) ? (string) $aValues['mimeIndex'] : ''
-			);
 		}
 
 		return $this->jsonResponse(__FUNCTION__, $aResult);
@@ -180,32 +211,40 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 	public function DoAttachmentsActions(\SnappyMail\AttachmentsAction $data)
 	{
 		if (static::isLoggedIn() && 'nextcloud' === $data->action) {
-			$oFiles = \OCP\Files::getStorage('files');
-			if ($oFiles && \method_exists($oFiles, 'file_put_contents')) {
+			try {
 				$sSaveFolder = \ltrim($this->jsonParam('NcFolder', ''), '/');
 				$sSaveFolder = $sSaveFolder ?: 'Attachments';
-				$oFiles->is_dir($sSaveFolder) || $oFiles->mkdir($sSaveFolder);
-				$data->result = true;
+				$sSaveFolder = static::NormalizePath($sSaveFolder, true);
+				$oTargetFolder = static::FolderAtPath($sSaveFolder);
+				$aSavedFiles = [];
 				foreach ($data->items as $aItem) {
-					$sSavedFileName = empty($aItem['fileName']) ? 'file.dat' : $aItem['fileName'];
+					$sSavedFileName = \MailSo\Base\Utils::SecureFileName(
+						empty($aItem['fileName']) ? 'file.dat' : $aItem['fileName']
+					);
+					$sSavedFileName = $sSavedFileName ?: 'file.dat';
+					$sSavedFileName = $oTargetFolder->getNonExistingName($sSavedFileName);
+					$oFile = null;
 					if (!empty($aItem['data'])) {
-						$sSavedFileNameFull = static::SmartFileExists($sSaveFolder.'/'.$sSavedFileName, $oFiles);
-						if (!$oFiles->file_put_contents($sSavedFileNameFull, $aItem['data'])) {
-							$data->result = false;
-						}
+						$oFile = $oTargetFolder->newFile($sSavedFileName, $aItem['data']);
 					} else if (!empty($aItem['fileHash'])) {
 						$fFile = $data->filesProvider->GetFile($data->account, $aItem['fileHash'], 'rb');
 						if (\is_resource($fFile)) {
-							$sSavedFileNameFull = static::SmartFileExists($sSaveFolder.'/'.$sSavedFileName, $oFiles);
-							if (!$oFiles->file_put_contents($sSavedFileNameFull, $fFile)) {
-								$data->result = false;
-							}
-							if (\is_resource($fFile)) {
+							try {
+								$oFile = $oTargetFolder->newFile($sSavedFileName, $fFile);
+							} finally {
 								\fclose($fFile);
 							}
 						}
 					}
+					if (!$oFile instanceof \OCP\Files\File) {
+						throw new \RuntimeException('An attachment could not be read');
+					}
+					$aSavedFiles[] = static::FileMetadata($oFile);
 				}
+				$data->result = ['success' => true, 'files' => $aSavedFiles];
+			} catch (\Throwable $oException) {
+				\SnappyMail\Log::error('Nextcloud', $oException->getMessage());
+				$data->result = false;
 			}
 		}
 	}
@@ -385,32 +424,57 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 		);
 	}
 
-	private static function SmartFileExists(string $sFilePath, $oFiles) : string
+	private static function UserFolder() : \OCP\Files\Folder
 	{
-		$sFilePath = \str_replace('\\', '/', \trim($sFilePath));
-
-		if (!$oFiles->file_exists($sFilePath)) {
-			return $sFilePath;
+		$oUser = \OC::$server->get(\OCP\IUserSession::class)->getUser();
+		if (!$oUser) {
+			throw new \RuntimeException('No active Nextcloud user');
 		}
+		return \OC::$server->get(\OCP\Files\IRootFolder::class)->getUserFolder($oUser->getUID());
+	}
 
-		$aFileInfo = \pathinfo($sFilePath);
-
-		$iIndex = 0;
-
-		while (true) {
-			++$iIndex;
-			$sFilePathNew = $aFileInfo['dirname'].'/'.
-				\preg_replace('/\(\d{1,2}\)$/', '', $aFileInfo['filename']).
-				' ('.$iIndex.')'.
-				(empty($aFileInfo['extension']) ? '' : '.'.$aFileInfo['extension'])
-			;
-			if (!$oFiles->file_exists($sFilePathNew)) {
-				return $sFilePathNew;
+	private static function FolderAtPath(string $sPath) : \OCP\Files\Folder
+	{
+		$oFolder = static::UserFolder();
+		if ('' === $sPath) {
+			return $oFolder;
+		}
+		foreach (\explode('/', $sPath) as $sPart) {
+			$oNode = $oFolder->nodeExists($sPart) ? $oFolder->get($sPart) : $oFolder->newFolder($sPart);
+			if (!$oNode instanceof \OCP\Files\Folder) {
+				throw new \RuntimeException('A file blocks the selected Nextcloud folder path');
 			}
-			if (10 < $iIndex) {
-				break;
+			$oFolder = $oNode;
+		}
+		return $oFolder;
+	}
+
+	private static function NormalizePath(string $sPath, bool $bAllowRoot = false) : string
+	{
+		$sPath = \trim(\str_replace('\\', '/', $sPath), '/');
+		if ('' === $sPath) {
+			if ($bAllowRoot) {
+				return '';
+			}
+			throw new \InvalidArgumentException('No Nextcloud file was selected');
+		}
+		foreach (\explode('/', $sPath) as $sPart) {
+			if ('' === $sPart || '.' === $sPart || '..' === $sPart || \str_contains($sPart, "\0")) {
+				throw new \InvalidArgumentException('Invalid Nextcloud path');
 			}
 		}
-		return $sFilePath;
+		return $sPath;
+	}
+
+	private static function FileMetadata(\OCP\Files\File $oFile) : array
+	{
+		return [
+			'fileName' => $oFile->getName(),
+			'path' => $oFile->getPath(),
+			'size' => (int) $oFile->getSize(),
+			'mimeType' => $oFile->getMimeType(),
+			'mtime' => (int) $oFile->getMTime(),
+			'etag' => $oFile->getEtag()
+		];
 	}
 }
