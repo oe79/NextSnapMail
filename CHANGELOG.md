@@ -6,6 +6,8 @@
   Nextcloud 34 by replacing removed `OC\Server` shortcut methods.
 - Decouple the app-specific content security policy from Nextcloud's internal
   policy representation.
+- Preserve the legacy Knockout binding parser's required `unsafe-eval` CSP
+  source while continuing to block unsafe inline scripts.
 
 ### Changed
 

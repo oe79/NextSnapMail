@@ -20,7 +20,9 @@ class ContentSecurityPolicy
 		$snappyMailPolicy = \RainLoop\Api::getCSP();
 
 		foreach ($snappyMailPolicy->get('script-src') as $domain) {
-			if (!\in_array($domain, ["'unsafe-inline'", "'unsafe-eval'"], true)) {
+			// Knockout's legacy binding parser still evaluates binding strings.
+			// Keep unsafe-eval until those bindings have been migrated.
+			if ("'unsafe-inline'" !== $domain) {
 				$this->policy->addAllowedScriptDomain($domain);
 			}
 		}
