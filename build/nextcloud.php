@@ -25,6 +25,20 @@ foreach ($files as $file) {
 	}
 }
 
+// Bundle the Nextcloud integration plugin with the app. Fresh installations
+// must not depend on the external SnappyMail package repository.
+$pluginRoot = 'plugins/nextcloud';
+$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pluginRoot, RecursiveDirectoryIterator::SKIP_DOTS));
+foreach ($files as $file) {
+	if (is_file($file)) {
+		$name = str_replace('\\', '/', $file);
+		$name = substr($name, strlen($pluginRoot) + 1);
+		$archiveName = "snappymail/app/bundled-plugins/nextcloud/{$name}";
+		$nc_tar->addFile($file, $archiveName);
+		$hashes["app/bundled-plugins/nextcloud/{$name}"] = hash_file('sha512', $file);
+	}
+}
+
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('snappymail/v'), RecursiveIteratorIterator::SELF_FIRST);
 foreach ($files as $file) {
 	if (is_file($file)) {

@@ -16,7 +16,7 @@ class PersonalSettings implements ISettings
 
 	public function getForm()
 	{
-		$uid = \OC::$server->getUserSession()->getUser()->getUID();
+		$uid = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
 		$sEmail = $this->config->getUserValue($uid, 'snappymail', 'snappymail-email');
 		if ($sPass = $this->config->getUserValue($uid, 'snappymail', 'snappymail-password')) {
 			$this->config->deleteUserValue($uid, 'snappymail', 'snappymail-password');

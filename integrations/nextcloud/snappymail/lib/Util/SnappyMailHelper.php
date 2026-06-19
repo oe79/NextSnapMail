@@ -57,7 +57,7 @@ class SnappyMailHelper
 			$oActions = \RainLoop\Api::Actions();
 			if (isset($_GET[$oConfig->Get('security', 'admin_panel_key', 'admin')])) {
 				if ($oConfig->Get('security', 'allow_admin_panel', true)
-				&& \OC_User::isAdminUser(\OC::$server->getUserSession()->getUser()->getUID())
+				&& \OC_User::isAdminUser(\OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID())
 				&& !$oActions->IsAdminLoggined(false)
 				) {
 					$sRand = \MailSo\Base\Utils::Sha1Rand();
@@ -92,7 +92,6 @@ class SnappyMailHelper
 				if ($doLogin && $aCredentials[1] && $aCredentials[2]) {
 					$isOIDC = \str_starts_with($aCredentials[2], 'oidc_login|');
 					try {
-						$ocSession = \OC::$server->getSession();
 						$oAccount = $oActions->LoginProcess($aCredentials[1], $aCredentials[2]);
 						if (!$isOIDC && $oAccount
 						 && $oConfig->Get('login', 'sign_me_auto', \RainLoop\Enumerations\SignMeType::DefaultOff) === \RainLoop\Enumerations\SignMeType::DefaultOn
@@ -102,9 +101,9 @@ class SnappyMailHelper
 					} catch (\Throwable $e) {
 						// Login failure, reset password to prevent more attempts
 						if (!$isOIDC) {
-							$sUID = \OC::$server->getUserSession()->getUser()->getUID();
-							\OC::$server->getSession()['snappymail-passphrase'] = '';
-							\OC::$server->getConfig()->setUserValue($sUID, 'snappymail', 'passphrase', '');
+							$sUID = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+							\OC::$server->get(\OCP\ISession::class)->set('snappymail-passphrase', '');
+							\OC::$server->get(\OCP\IConfig::class)->setUserValue($sUID, 'snappymail', 'passphrase', '');
 							\SnappyMail\Log::error('Nextcloud', $e->getMessage());
 						}
 					}
@@ -127,12 +126,12 @@ class SnappyMailHelper
 	// https://apps.nextcloud.com/apps/oidc_login
 	public static function isOIDCLogin() : bool
 	{
-		$config = \OC::$server->getConfig();
+		$config = \OC::$server->get(\OCP\IConfig::class);
 		if ($config->getAppValue('snappymail', 'snappymail-autologin-oidc', false)) {
 			// Check if the OIDC Login app is enabled
-			if (\OC::$server->getAppManager()->isEnabledForUser('oidc_login')) {
+			if (\OC::$server->get(\OCP\App\IAppManager::class)->isEnabledForUser('oidc_login')) {
 				// Check if session is an OIDC Login
-				$ocSession = \OC::$server->getSession();
+				$ocSession = \OC::$server->get(\OCP\ISession::class);
 				if ($ocSession->get('is_oidc')) {
 					// IToken->getPassword() ???
 					if ($ocSession->get('oidc_access_token')) {
@@ -151,9 +150,9 @@ class SnappyMailHelper
 
 	private static function getLoginCredentials() : array
 	{
-		$sUID = \OC::$server->getUserSession()->getUser()->getUID();
-		$config = \OC::$server->getConfig();
-		$ocSession = \OC::$server->getSession();
+		$sUID = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+		$config = \OC::$server->get(\OCP\IConfig::class);
+		$ocSession = \OC::$server->get(\OCP\ISession::class);
 
 		// If the user has set credentials for SnappyMail in their personal settings,
 		// this has the first priority.
@@ -171,7 +170,7 @@ class SnappyMailHelper
 
 		// If the current user ID is identical to login ID (not valid when using account switching),
 		// this has the second priority.
-		if ($ocSession['snappymail-nc-uid'] == $sUID) {
+		if ($ocSession->get('snappymail-nc-uid') == $sUID) {
 
 			// If OpenID Connect (OIDC) is enabled and used for login, use this.
 			if (static::isOIDCLogin()) {
@@ -185,10 +184,10 @@ class SnappyMailHelper
 			$sPassword = '';
 			if ($config->getAppValue('snappymail', 'snappymail-autologin', false)) {
 				$sEmail = $sUID;
-				$sPassword = $ocSession['snappymail-passphrase'];
+				$sPassword = $ocSession->get('snappymail-passphrase');
 			} else if ($config->getAppValue('snappymail', 'snappymail-autologin-with-email', false)) {
 				$sEmail = $config->getUserValue($sUID, 'settings', 'email');
-				$sPassword = $ocSession['snappymail-passphrase'];
+				$sPassword = $ocSession->get('snappymail-passphrase');
 			} else {
 				\SnappyMail\Log::debug('Nextcloud', 'snappymail-autologin is off');
 			}
@@ -196,7 +195,8 @@ class SnappyMailHelper
 				return [$sUID, $sEmail, static::decodePassword($sPassword, $sUID)];
 			}
 		} else {
-			\SnappyMail\Log::debug('Nextcloud', "snappymail-nc-uid mismatch '{$ocSession['snappymail-nc-uid']}' != '{$sUID}'");
+			$sessionUID = $ocSession->get('snappymail-nc-uid');
+			\SnappyMail\Log::debug('Nextcloud', "snappymail-nc-uid mismatch '{$sessionUID}' != '{$sUID}'");
 		}
 
 		return [$sUID, '', ''];
@@ -204,7 +204,7 @@ class SnappyMailHelper
 
 	public static function getAppUrl() : string
 	{
-		return \OC::$server->getURLGenerator()->linkToRoute('snappymail.page.appGet');
+		return \OC::$server->get(\OCP\IURLGenerator::class)->linkToRoute('snappymail.page.appGet');
 	}
 
 	public static function normalizeUrl(string $sUrl) : string

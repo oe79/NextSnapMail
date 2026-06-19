@@ -33,7 +33,7 @@ class FetchController extends Controller {
 					'Message' => $this->l->t('Upgraded successfully')
 				]);
 			}
-		} catch (Exception $e) {
+		} catch (\Throwable $e) {
 			$error .= ': ' . $e->getMessage();
 		}
 		return new JSONResponse([
@@ -89,7 +89,7 @@ class FetchController extends Controller {
 				'status' => 'success',
 				'Message' => $this->l->t('Saved successfully')
 			]);
-		} catch (Exception $e) {
+		} catch (\Throwable $e) {
 			return new JSONResponse([
 				'status' => 'error',
 				'Message' => $e->getMessage()
@@ -104,7 +104,7 @@ class FetchController extends Controller {
 		try {
 			$sEmail = '';
 			if (isset($_POST['appname'], $_POST['snappymail-password'], $_POST['snappymail-email']) && 'snappymail' === $_POST['appname']) {
-				$sUser =  \OC::$server->getUserSession()->getUser()->getUID();
+				$sUser = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
 
 				$sEmail = $_POST['snappymail-email'];
 				$this->config->setUserValue($sUser, 'snappymail', 'snappymail-email', $sEmail);
@@ -131,7 +131,7 @@ class FetchController extends Controller {
 				'Message' => $this->l->t('Saved successfully'),
 				'Email' => $sEmail
 			]);
-		} catch (Exception $e) {
+		} catch (\Throwable $e) {
 			// Logout as the credentials might have changed, as exception could be in one attribute
 			// TODO: Handle both exceptions separately?
 			SnappyMailHelper::loadApp();

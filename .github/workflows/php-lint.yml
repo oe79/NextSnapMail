@@ -1,0 +1,38 @@
+name: PHP lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  nextcloud-php-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: Lint Nextcloud PHP sources
+        run: |
+          find integrations/nextcloud/snappymail plugins/nextcloud -name '*.php' -print0 \
+            | xargs -0 -n1 php -l
+          php -l build/nextcloud.php
