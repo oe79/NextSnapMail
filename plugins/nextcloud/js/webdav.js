@@ -44,8 +44,6 @@ const
 	getElementsByTagName = (parent, namespace, localName) => parent.getElementsByTagNameNS(namespace, localName),
 	getDavElementsByTagName = (parent, localName) => getElementsByTagName(parent, nsDAV, localName),
 	getDavElementByTagName = (parent, localName) => getDavElementsByTagName(parent, localName)?.item(0),
-	getElementByTagName = (parent, localName) => +parent.getElementsByTagName(localName)?.item(0),
-
 	ncFetch = (path, options) => {
 		if (!OC().requestToken) {
 			return Promise.reject(new Error('OC.requestToken missing'));
@@ -107,8 +105,9 @@ const
 				} else {
 					elem.isFile = true;
 					elem.id = e.getElementsByTagNameNS(nsOC, 'fileid')?.item(0)?.textContent;
-					elem.size = getDavElementByTagName(e, 'getcontentlength')?.textContent
-						|| getElementByTagName(e, 'oc:size')?.textContent;
+					elem.size = Number(getDavElementByTagName(e, 'getcontentlength')?.textContent
+						|| e.getElementsByTagNameNS(nsOC, 'size')?.item(0)?.textContent
+						|| 0);
 					elem.shared = [...e.getElementsByTagNameNS(nsOC, 'share-type')].some(node => '3' == node.textContent);
 				}
 				elemList.push(elem);

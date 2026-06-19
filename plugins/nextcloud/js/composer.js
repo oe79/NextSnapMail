@@ -18,10 +18,14 @@
 							rl.pluginRemoteRequest(
 								(iError, data) => {
 									attachment.uploading(false).complete(true);
-									if (iError) {
+									if (iError || !data?.Result?.success) {
 										attachment.error(data?.Result?.error || 'failed');
 									} else {
-										attachment.tempName(data.Result.tempName);
+										const result = data.Result;
+										attachment.fileName(result.fileName || attachment.fileName());
+										attachment.size(Number(result.size));
+										attachment.type(result.mimeType || 'application/octet-stream');
+										attachment.tempName(result.tempName);
 									}
 								},
 								'NextcloudAttachFile',
