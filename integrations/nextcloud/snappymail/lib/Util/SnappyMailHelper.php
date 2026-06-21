@@ -99,11 +99,20 @@ class SnappyMailHelper
 							$oActions->SetSignMeToken($oAccount);
 						}
 					} catch (\Throwable $e) {
-						// Login failure, reset password to prevent more attempts
 						if (!$isOIDC) {
-							$sUID = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
-							\OC::$server->get(\OCP\ISession::class)->set('snappymail-passphrase', '');
-							\OC::$server->get(\OCP\IConfig::class)->setUserValue($sUID, 'snappymail', 'passphrase', '');
+							// Credentials saved in the user's personal settings must never be
+							// deleted as a side effect of a failed login. A temporary network,
+							// DNS, TLS, or mail server outage is not a password change.
+							//
+							// Only discard the password captured from the current Nextcloud
+							// session when the IMAP server explicitly rejected authentication.
+							// Persisted credentials remain available for the user to inspect or
+							// replace in their personal settings.
+							if ($e instanceof \RainLoop\Exceptions\ClientException
+							 && \RainLoop\Notifications::AuthError === $e->getCode()
+							) {
+								\OC::$server->get(\OCP\ISession::class)->set('snappymail-passphrase', '');
+							}
 							\SnappyMail\Log::error('Nextcloud', $e->getMessage());
 						}
 					}
