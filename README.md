@@ -9,10 +9,45 @@ The project continues development of the existing SnappyMail codebase for the
 Nextcloud use case. It is not an official continuation of SnappyMail and is not
 affiliated with, endorsed by, or sponsored by Nextcloud GmbH.
 
+> [!WARNING]
+> NextSnapMail is under active development and is not yet ready for production
+> use. Anyone installing, testing, or using it does so at their own risk. There
+> is no warranty, and users are responsible for backups and for protecting
+> their own systems, accounts, credentials, and data.
+
+## Current development status
+
+The following foundation and compatibility work has been completed on the
+`master` branch:
+
+- established the NextSnapMail project identity, scope, provenance, license,
+  and trademark documentation
+  ([#1](https://github.com/oe79/NextSnapMail/pull/1));
+- restored operation with Nextcloud 34 by replacing removed server APIs,
+  updating Content Security Policy integration, and bundling the required
+  Nextcloud plugin with app builds
+  ([#2](https://github.com/oe79/NextSnapMail/pull/2));
+- added automatic PHP syntax checks for PHP 8.2, 8.3, 8.4, and 8.5
+  ([#2](https://github.com/oe79/NextSnapMail/pull/2));
+- repaired saving messages and attachments to Nextcloud Files and attaching
+  files from Nextcloud, including verified file sizes, MIME types, modification
+  times, ETags, and duplicate filename handling
+  ([#3](https://github.com/oe79/NextSnapMail/pull/3));
+- preserved credentials stored in personal settings during temporary network,
+  DNS, TLS, or mail-server outages
+  ([#4](https://github.com/oe79/NextSnapMail/pull/4)).
+
+The Nextcloud 34 compatibility, file transfer, and credential-preservation
+changes have also been tested manually on running Nextcloud installations.
+
+Important work still in progress includes removing the temporary
+`unsafe-eval` Content Security Policy allowance, creating a reproducible
+Nextcloud-only release process, deciding the future app identifier and
+migration path, and publishing the first signed NextSnapMail release.
+
 ## Project status
 
-NextSnapMail is currently in the initial restructuring phase and is **not yet
-ready for production use**.
+NextSnapMail is currently in the initial restructuring phase.
 
 The repository still contains the original SnappyMail application structure,
 name, app identifier, integrations, and release tooling. These will be reviewed
