@@ -256,7 +256,7 @@ if (isset($options['sign'])) {
 	passthru('gpg --local-user 1016E47079145542F8BA133548208BA13290F3EB --armor --detach-sign '.escapeshellarg($zip_destination), $return_var);
 	if (isset($options['nextcloud'])) {
 		passthru('gpg --local-user 1016E47079145542F8BA133548208BA13290F3EB --armor --detach-sign '
-			.escapeshellarg("{$destPath}snappymail-{$package->version}-nextcloud.tar.gz"), $return_var);
+			.escapeshellarg("{$destPath}nextsnapmail-{$package->version}-nextcloud.tar.gz"), $return_var);
 	}
 	if (isset($options['owncloud'])) {
 		passthru('gpg --local-user 1016E47079145542F8BA133548208BA13290F3EB --armor --detach-sign '
