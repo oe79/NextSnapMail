@@ -1,4 +1,22 @@
-## NextSnapMail (unreleased)
+## 0.1.0 – 2026-06-30
+
+Initial NextSnapMail release as an independent SnappyMail fork focused on
+Nextcloud integration.
+
+### Added
+
+- Introduce `nextsnapmail` as a standalone Nextcloud app id and namespace.
+- Add dedicated "NextSnapMail" sections to the Nextcloud administration and
+  personal settings.
+- Bundle available SnappyMail extensions with the app release so installations
+  no longer depend on the former external SnappyMail package repository.
+
+### Changed
+
+- Rename the Nextcloud integration from SnappyMail to NextSnapMail while keeping
+  attribution to the upstream SnappyMail and RainLoop projects.
+- Update app metadata, documentation links and release description for the
+  NextSnapMail fork.
 
 ### Fixed
 
@@ -8,11 +26,6 @@
   policy representation.
 - Preserve the legacy Knockout binding parser's required `unsafe-eval` CSP
   source while continuing to block unsafe inline scripts.
-
-### Changed
-
-- Bundle the required Nextcloud plugin with the app release instead of
-  downloading it from the former SnappyMail package repository.
 
 
 ## 2.38.2 – 2024-10-09
