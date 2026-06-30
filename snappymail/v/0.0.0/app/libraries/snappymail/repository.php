@@ -98,6 +98,12 @@ abstract class Repository
 	private static function getRepositoryData(bool &$bReal, string &$sError) : array
 	{
 		$aResult = array();
+		foreach (static::getBundledPackages() as $sId => $aItem) {
+			$aResult[$sId] = $aItem;
+		}
+		$bReal = true;
+		return $aResult;
+
 		try {
 			foreach (static::getRepositoryDataByUrl($bReal) as $oItem) {
 				if ($oItem
@@ -131,6 +137,68 @@ abstract class Repository
 		return $aResult;
 	}
 
+	private static function getBundledPackages() : array
+	{
+		$aResult = array();
+		$sPath = APP_INDEX_ROOT_PATH . 'bundled-plugins';
+		if (!\is_dir($sPath)) {
+			return $aResult;
+		}
+
+		foreach (new \DirectoryIterator($sPath) as $oItem) {
+			if ($oItem->isDot() || !$oItem->isDir()) {
+				continue;
+			}
+
+			$sId = $oItem->getFilename();
+			$aResult[$sId] = array(
+				'type' => 'plugin',
+				'id' => $sId,
+				'name' => static::pluginNameFromId($sId),
+				'installed' => '',
+				'enabled' => false,
+				'version' => '',
+				'file' => $sId,
+				'release' => '',
+				'desc' => 'Bundled extension',
+				'canBeDeleted' => false,
+				'canBeUpdated' => false
+			);
+		}
+
+		\uksort($aResult, 'strcasecmp');
+		return $aResult;
+	}
+
+	private static function pluginNameFromId(string $sId) : string
+	{
+		return \implode(' ', \array_map('ucfirst', \explode(' ', \preg_replace('/[^a-z0-9]+/i', ' ', $sId))));
+	}
+
+	private static function copyDirectory(string $sSource, string $sDestination) : void
+	{
+		if (!\is_dir($sDestination) && !\mkdir($sDestination, 0755, true) && !\is_dir($sDestination)) {
+			throw new \RuntimeException("Could not create directory {$sDestination}");
+		}
+
+		$oIterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($sSource, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
+		$iPrefixLength = \strlen($sSource) + 1;
+
+		foreach ($oIterator as $oItem) {
+			$sTarget = $sDestination . '/' . \substr($oItem->getPathname(), $iPrefixLength);
+			if ($oItem->isDir()) {
+				if (!\is_dir($sTarget) && !\mkdir($sTarget, 0755, true) && !\is_dir($sTarget)) {
+					throw new \RuntimeException("Could not create directory {$sTarget}");
+				}
+			} elseif (!\copy($oItem->getPathname(), $sTarget)) {
+				throw new \RuntimeException("Could not copy {$sTarget}");
+			}
+		}
+	}
+
 	/**
 	 * return object
 			$info->version
@@ -140,24 +208,21 @@ abstract class Repository
 	public static function getLatestCoreInfo()
 	{
 		\RainLoop\Api::Actions()->IsAdminLoggined();
-		$sRep = static::get('core.json');
-		return $sRep ? \json_decode($sRep, false, 3, JSON_THROW_ON_ERROR) : null;
+		return (object) array(
+			'version' => APP_VERSION,
+			'file' => '',
+			'warnings' => array()
+		);
 	}
 
 	public static function downloadCore() : ?string
 	{
-		$info = static::getLatestCoreInfo();
-		return ($info && \version_compare(APP_VERSION, $info->version, '<'))
-			? static::download($info->file) // '../latest.tar.gz'
-			: null;
+		return null;
 	}
 
 	public static function canUpdateCore() : bool
 	{
-		return \version_compare(APP_VERSION, '2.0', '>')
-			&& \is_writable(\dirname(APP_VERSION_ROOT_PATH))
-			&& \is_writable(APP_INDEX_ROOT_PATH . 'index.php')
-			&& \RainLoop\Api::Config()->Get('admin_panel', 'allow_update', false);
+		return false;
 	}
 
 	public static function getEnabledPackagesNames() : array
@@ -230,11 +295,15 @@ abstract class Repository
 			}
 		}
 
-//		\uksort($aList, static function($a, $b){return \strcasecmp($a['name'], $b['name']);});
+		$aList = \array_values($aList);
+		\usort($aList, static function($a, $b) {
+			return ((int) !empty($b['enabled']) <=> (int) !empty($a['enabled']))
+				?: \strcasecmp($a['name'] ?: $a['id'], $b['name'] ?: $b['id']);
+		});
 
 		return array(
 			 'Real' => $bReal,
-			 'List' => \array_values($aList),
+			 'List' => $aList,
 			 'Error' => $sError
 		);
 	}
@@ -264,6 +333,17 @@ abstract class Repository
 		$bResult = false;
 		$sTmp = null;
 		try {
+			if ('plugin' === $sType) {
+				$sBundledPlugin = APP_INDEX_ROOT_PATH . 'bundled-plugins/' . $sId;
+				if (\preg_match('/^[a-z0-9\-]+$/', $sId) && \is_dir($sBundledPlugin)) {
+					if (!static::deletePackageDir($sId)) {
+						throw new \Exception('Cannot remove previous plugin folder: '.$sId);
+					}
+					static::copyDirectory($sBundledPlugin, APP_PLUGINS_PATH . $sId);
+					return true;
+				}
+			}
+
 			if ('plugin' === $sType) {
 				$bReal = false;
 				$sError = '';

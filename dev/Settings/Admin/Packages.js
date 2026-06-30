@@ -24,8 +24,13 @@ export class AdminSettingsPackages extends AbstractViewSettings {
 
 		this.packages = PackageAdminStore;
 
+		const sortInstalledPackages = list => list.sort((a, b) =>
+			(b.enabled?.() ? 1 : 0) - (a.enabled?.() ? 1 : 0)
+			|| a.name.localeCompare(b.name)
+		);
+
 		addComputablesTo(this, {
-			packagesCurrent: () => PackageAdminStore().filter(item => item?.installed && !item.canBeUpdated),
+			packagesCurrent: () => sortInstalledPackages(PackageAdminStore().filter(item => item?.installed && !item.canBeUpdated)),
 			packagesUpdate: () => PackageAdminStore().filter(item => item?.installed && item.canBeUpdated),
 			packagesAvailable: () => PackageAdminStore().filter(item => !item?.installed),
 

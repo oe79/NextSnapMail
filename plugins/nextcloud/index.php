@@ -43,7 +43,7 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 			$this->addHook('sieve.before-login', 'beforeLogin');
 		} else {
 			\SnappyMail\Log::debug('Nextcloud', 'NOT integrated');
-			// \OC::$server->getConfig()->getAppValue('snappymail', 'snappymail-no-embed');
+			// \OC::$server->getConfig()->getAppValue('nextsnapmail', 'nextsnapmail-no-embed');
 			$this->addHook('main.content-security-policy', 'ContentSecurityPolicy');
 		}
 	}
@@ -93,11 +93,11 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 		// it is enabled in config, the user is currently logged in with OIDC,
 		// the current snappymail account is the OIDC account and no account defined explicitly
 		if ($oAccount instanceof \RainLoop\Model\MainAccount
-		 && \OCA\SnappyMail\Util\SnappyMailHelper::isOIDCLogin()
+		 && \OCA\NextSnapMail\Util\SnappyMailHelper::isOIDCLogin()
 //		 && $oClient->supportsAuthType('OAUTHBEARER') // v2.28
 		 && \str_starts_with($oSettings->passphrase, 'oidc_login|')
 		) {
-//			$oSettings->passphrase = \OC::$server->getSession()->get('snappymail-passphrase');
+//			$oSettings->passphrase = \OC::$server->getSession()->get('nextsnapmail-passphrase');
 			$oSettings->passphrase = \OC::$server->get(\OCP\ISession::class)->get('oidc_access_token');
 			\array_unshift($oSettings->SASLMechanisms, 'OAUTHBEARER');
 		}
@@ -268,16 +268,16 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 				$sEmail = '';
 				// Only store the user's password in the current session if they have
 				// enabled auto-login using Nextcloud username or email address.
-				if ($config->getAppValue('snappymail', 'snappymail-autologin', false)) {
+				if ($config->getAppValue('nextsnapmail', 'nextsnapmail-autologin', false)) {
 					$sEmail = $sUID;
-				} else if ($config->getAppValue('snappymail', 'snappymail-autologin-with-email', false)) {
+				} else if ($config->getAppValue('nextsnapmail', 'nextsnapmail-autologin-with-email', false)) {
 					$sEmail = $config->getUserValue($sUID, 'settings', 'email', '');
 				} else {
-					\SnappyMail\Log::debug('Nextcloud', 'snappymail-autologin is off');
+					\SnappyMail\Log::debug('Nextcloud', 'nextsnapmail-autologin is off');
 				}
 				// If the user has set credentials for SnappyMail in their personal
 				// settings, override everything before and use those instead.
-				$sCustomEmail = $config->getUserValue($sUID, 'snappymail', 'snappymail-email', '');
+				$sCustomEmail = $config->getUserValue($sUID, 'nextsnapmail', 'nextsnapmail-email', '');
 				if ($sCustomEmail) {
 					$sEmail = $sCustomEmail;
 				}
@@ -286,7 +286,7 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 //						?: $ocUser->getPrimaryEMailAddress();
 				}
 /*
-				if ($config->getAppValue('snappymail', 'snappymail-autologin-oidc', false)) {
+				if ($config->getAppValue('nextsnapmail', 'nextsnapmail-autologin-oidc', false)) {
 					if (\OC::$server->getSession()->get('is_oidc')) {
 						$sEmail = "{$sUID}@nextcloud";
 						$aResult['DevPassword'] = \OC::$server->getSession()->get('oidc_access_token');
@@ -308,7 +308,7 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 					$aResult['ContactsSync']['User'] = $sUID;
 					$bSave = true;
 				}
-				$pass = \OC::$server->get(\OCP\ISession::class)->get('snappymail-passphrase');
+				$pass = \OC::$server->get(\OCP\ISession::class)->get('nextsnapmail-passphrase');
 				if ($pass/* && empty($aResult['ContactsSync']['Password'])*/) {
 					$pass = \SnappyMail\Crypt::DecryptUrlSafe($pass, $sUID);
 					if ($pass) {

@@ -1,18 +1,17 @@
 {
-  "name": "snappymail",
-  "title": "SnappyMail",
-  "description": "Simple, modern & fast web-based email client",
+  "name": "nextsnapmail",
+  "title": "NextSnapMail",
+  "description": "A SnappyMail fork focused on integration with Nextcloud",
   "private": true,
-  "version": "2.38.2",
-  "homepage": "https://snappymail.eu",
+  "version": "0.1.0",
+  "homepage": "https://github.com/oe79/NextSnapMail",
   "author": {
-    "name": "DJ Maze",
-    "email": "support@snappymail.eu",
-    "web": "https://snappymail.eu"
+    "name": "NextSnapMail contributors",
+    "web": "https://github.com/oe79/NextSnapMail"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/the-djmaze/snappymail.git"
+    "url": "git://github.com/oe79/NextSnapMail.git"
   },
   "scripts": {
     "watch-css": "gulp watchCss"
@@ -25,7 +24,7 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/the-djmaze/snappymail/issues"
+    "url": "https://github.com/oe79/NextSnapMail/issues"
   },
   "keywords": [
     "webmail",

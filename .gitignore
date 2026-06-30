@@ -5,6 +5,7 @@
 /snappymail/v/0.0.0/static/*
 /node_modules
 /build/local
+/build/local-nextsnapmail-app
 /build/dist
 /build/tmp
 /build/docker

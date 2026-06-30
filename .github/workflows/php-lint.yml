@@ -33,6 +33,6 @@ jobs:
 
       - name: Lint Nextcloud PHP sources
         run: |
-          find integrations/nextcloud/snappymail plugins/nextcloud -name '*.php' -print0 \
+          find integrations/nextcloud/nextsnapmail plugins/nextcloud -name '*.php' -print0 \
             | xargs -0 -n1 php -l
           php -l build/nextcloud.php

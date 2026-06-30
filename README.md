@@ -9,6 +9,14 @@ The project continues development of the existing SnappyMail codebase for the
 Nextcloud use case. It is not an official continuation of SnappyMail and is not
 affiliated with, endorsed by, or sponsored by Nextcloud GmbH.
 
+Recommended public wording:
+
+- Name: **NextSnapMail**
+- Short description: **A SnappyMail fork focused on integration with Nextcloud**
+
+Avoid descriptions that could imply official Nextcloud status, such as
+"Official Nextcloud Mail replacement".
+
 > [!WARNING]
 > NextSnapMail is under active development and is not yet ready for production
 > use. Anyone installing, testing, or using it does so at their own risk. There
@@ -49,10 +57,11 @@ migration path, and publishing the first signed NextSnapMail release.
 
 NextSnapMail is currently in the initial restructuring phase.
 
-The repository still contains the original SnappyMail application structure,
-name, app identifier, integrations, and release tooling. These will be reviewed
-and migrated incrementally. Until a first NextSnapMail release is published,
-use the official SnappyMail releases for existing installations.
+The repository still contains the inherited SnappyMail webmail core and several
+legacy integration and release files. The Nextcloud app identity has been
+separated as `nextsnapmail` and will be reviewed and migrated incrementally.
+Until a first signed NextSnapMail release is published, use the official
+SnappyMail releases for existing production installations.
 
 ## Scope
 
@@ -80,7 +89,7 @@ removed after their dependencies have been reviewed.
 ## Planned first milestones
 
 1. Establish the NextSnapMail project identity and preserve provenance.
-2. Decide and document the new Nextcloud app identifier and migration path.
+2. Stabilize the new Nextcloud app identifier and document the migration path.
 3. Bundle the required Nextcloud integration without relying on the former
    SnappyMail package service.
 4. Introduce a reproducible Nextcloud-only build and test process.
