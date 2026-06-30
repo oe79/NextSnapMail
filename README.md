@@ -43,15 +43,21 @@ The following foundation and compatibility work has been completed on the
   ([#3](https://github.com/oe79/NextSnapMail/pull/3));
 - preserved credentials stored in personal settings during temporary network,
   DNS, TLS, or mail-server outages
-  ([#4](https://github.com/oe79/NextSnapMail/pull/4)).
+  ([#4](https://github.com/oe79/NextSnapMail/pull/4));
+- separated the Nextcloud app identity as `nextsnapmail`, set the initial
+  NextSnapMail app version to `0.1.0`, added dedicated NextSnapMail settings
+  sections, bundled available extensions with the app package, removed the
+  dependency on the former SnappyMail package service for extension and core
+  update checks, and sorted active extensions first in the admin extension list
+  ([#6](https://github.com/oe79/NextSnapMail/pull/6)).
 
 The Nextcloud 34 compatibility, file transfer, and credential-preservation
 changes have also been tested manually on running Nextcloud installations.
 
 Important work still in progress includes removing the temporary
-`unsafe-eval` Content Security Policy allowance, creating a reproducible
-Nextcloud-only release process, deciding the future app identifier and
-migration path, and publishing the first signed NextSnapMail release.
+`unsafe-eval` Content Security Policy allowance, finalizing the reproducible
+Nextcloud-only release process, documenting the migration path for existing
+SnappyMail installations, and publishing the first signed NextSnapMail release.
 
 ## Project status
 
