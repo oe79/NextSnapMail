@@ -25,21 +25,22 @@ use case. It is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH
 - **Many security features** (Sodium encrypted passwords, Sec-Fetch, TOTP 2FA, DKIM, prevent tracking, etc.)
 - **Kolab integrations**
 
-After enabling in Nextcloud, go to Nextcloud admin panel, "Additional settings" and you will see a "NextSnapMail Webmail" section.
-There, click on the link to go to the NextSnapMail admin panel.
+After enabling the app, administrators can configure the integration in the
+dedicated "NextSnapMail" section of the Nextcloud administration settings.
+Users can add their initial mailbox credentials in the dedicated
+"NextSnapMail" section of their personal settings.
 	]]></description>
 	<namespace>NextSnapMail</namespace>
 	<documentation>
 		<user>https://github.com/oe79/NextSnapMail/blob/master/integrations/nextcloud/nextsnapmail/README.md</user>
-		<admin>https://github.com/the-djmaze/snappymail/wiki/Admin-Manual</admin>
-		<developer>https://github.com/the-djmaze/snappymail/wiki/Developer-Documentation</developer>
-		<website>https://github.com/the-djmaze/snappymail/wiki</website>
+		<admin>https://github.com/oe79/NextSnapMail/blob/master/integrations/nextcloud/nextsnapmail/README.md</admin>
+		<developer>https://github.com/oe79/NextSnapMail</developer>
+		<website>https://github.com/oe79/NextSnapMail</website>
 	</documentation>
 	<category>integration</category>
 	<category>office</category>
 	<category>search</category>
 	<category>social</category>
-	<screenshot>https://raw.githubusercontent.com/the-djmaze/snappymail/master/integrations/nextcloud/screenshots/inbox.jpg</screenshot>
 	<website>https://github.com/oe79/NextSnapMail</website>
 	<discussion>https://github.com/oe79/NextSnapMail/discussions</discussion>
 	<repository>https://github.com/oe79/NextSnapMail</repository>
