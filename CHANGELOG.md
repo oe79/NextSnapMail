@@ -1,3 +1,11 @@
+## 0.1.1 – 2026-07-01
+
+### Fixed
+
+- Ensure the Nextcloud App Store release package uses the cleaned NextSnapMail
+  app metadata from the repository instead of stale local test metadata.
+
+
 ## 0.1.0 – 2026-06-30
 
 Initial NextSnapMail release as an independent SnappyMail fork focused on
