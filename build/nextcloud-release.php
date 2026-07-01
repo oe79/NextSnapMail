@@ -153,6 +153,11 @@ function copyDirectory(string $source, string $destination): void
 
 function syncRepositoryMetadata(string $appPath, string $version): void
 {
+	copy(ROOT_DIR . '/integrations/nextcloud/nextsnapmail/appinfo/info.xml', "{$appPath}/appinfo/info.xml");
+	$infoXml = file_get_contents("{$appPath}/appinfo/info.xml");
+	$infoXml = preg_replace('/<version>[^<]*<\/version>/', "<version>{$version}</version>", $infoXml);
+	file_put_contents("{$appPath}/appinfo/info.xml", $infoXml);
+
 	copy(ROOT_DIR . '/CHANGELOG.md', "{$appPath}/CHANGELOG.md");
 	file_put_contents("{$appPath}/VERSION", $version . "\n");
 }
