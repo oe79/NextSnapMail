@@ -1,3 +1,13 @@
+## 0.1.2 – 2026-07-02
+
+### Changed
+
+- Add an explicit App Store disclaimer that NextSnapMail is provided as-is and
+  should be used at the user's own risk.
+- Show `NextSnapMail` instead of `SnappyMail` in the embedded admin panel
+  header.
+
+
 ## 0.1.1 – 2026-07-01
 
 ### Fixed
