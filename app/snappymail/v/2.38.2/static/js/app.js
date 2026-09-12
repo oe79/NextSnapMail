@@ -7481,6 +7481,7 @@ body > * {
 			folderInformation(iF);
 			iF === cF || folderInformation(cF);
 			folderInformationMultiply();
+			refreshAccountUnreadCounts();
 		}, refreshFoldersInterval);
 	},
 
@@ -8759,9 +8760,8 @@ body > * {
 				isAdditional: isAdditional
 			});
 
-			// Load at random between 3 and 30 seconds
-			SettingsUserStore.showUnreadCount() && isAdditional
-			&& setTimeout(()=>this.fetchUnread(), (Math.ceil(Math.random() * 10)) * 3000);
+			this.unreadRequestPending = false;
+			this.unreadLastChecked = null;
 		}
 
 		label() {
@@ -8772,8 +8772,18 @@ body > * {
 		 * Get INBOX unread messages
 		 */
 		fetchUnread() {
+			if (!SettingsUserStore.showUnreadCount() || this.unreadRequestPending
+				|| (null !== this.unreadLastChecked && Date.now() - this.unreadLastChecked < 30000)) {
+				return;
+			}
+			this.unreadRequestPending = true;
+			this.unreadLastChecked = Date.now();
 			Remote.request('AccountUnread', (iError, oData) => {
-				iError || this.unreadEmails(oData?.Result?.unreadEmails || null);
+				this.unreadRequestPending = false;
+				if (SettingsUserStore.showUnreadCount() && AccountUserStore().includes(this)) {
+					// Hide an unavailable count instead of presenting stale data as current.
+					this.unreadEmails(iError ? null : (oData?.Result?.unreadEmails || null));
+				}
 			}, {
 				email: this.email
 			});
@@ -8798,6 +8808,22 @@ body > * {
 		*/
 
 	}
+
+	const refreshAccountUnreadCounts = () => {
+		const enabled = SettingsUserStore.showUnreadCount(),
+			activeEmail = AccountUserStore.email(),
+			inbox = getFolderFromCacheList(getFolderInboxName());
+		AccountUserStore.forEach(account => {
+			if (!enabled) {
+				account.unreadEmails(null);
+				account.unreadLastChecked = null;
+			} else if (account.email === activeEmail && inbox) {
+				account.unreadEmails(inbox.unreadEmails() || null);
+			} else {
+				account.fetchUnread();
+			}
+		});
+	};
 
 	class IdentityModel extends AbstractModel {
 		/**
@@ -9014,6 +9040,7 @@ body > * {
 					: []
 				);
 				AccountUserStore.unshift(new AccountModel(SettingsGet('mainEmail'), '', false));
+				refreshAccountUnreadCounts();
 
 				items = oData.Result.Identities;
 				IdentityUserStore(isArray(items)
@@ -11131,10 +11158,6 @@ body > * {
 
 			this.accounts = AccountUserStore;
 			this.accountsLoading = AccountUserStore.loading;
-	/*
-			this.accountsUnreadCount = : koComputable(() => 0);
-			this.accountsUnreadCount = : koComputable(() => AccountUserStore().reduce((result, item) => result + item.count(), 0));
-	*/
 
 			addObservablesTo(this, {
 				currentAudio: '',
@@ -11214,10 +11237,14 @@ body > * {
 		}
 
 		onBuild() {
+			this.accountMenu().addEventListener('click', event => {
+				event.target.closest('.dropdown-toggle') && refreshAccountUnreadCounts();
+			});
 			registerShortcut('m', '', [ScopeMessageList, ScopeMessageView, ScopeSettings], () => {
 				if (!this.viewModelDom.hidden) {
 	//				exitFullscreen();
 					this.accountMenu().ddBtn.toggle();
+					refreshAccountUnreadCounts();
 					return false;
 				}
 			});
@@ -15093,12 +15120,12 @@ body > * {
 
 			addEventListener('mailbox.inbox-unread-count', e => {
 				FolderUserStore.foldersInboxUnreadCount(e.detail);
-	/*			// Disabled in SystemDropDown.html
 				const email = AccountUserStore.email();
 				AccountUserStore.forEach(item =>
-					email === item?.email && item?.count(e.detail)
+					email === item.email && item.unreadEmails(
+						SettingsUserStore.showUnreadCount() ? (e.detail || null) : null
+					)
 				);
-	*/
 				this.updateWindowTitle();
 			});
 		}
@@ -15557,7 +15584,10 @@ body > * {
 			this.identityForDeletion = ko.observable(null).askDeleteHelper();
 
 			this.showUnread = SettingsUserStore.showUnreadCount;
-			SettingsUserStore.showUnreadCount.subscribe(value => Remote.saveSetting('ShowUnreadCount', value));
+			SettingsUserStore.showUnreadCount.subscribe(value => {
+				Remote.saveSetting('ShowUnreadCount', value);
+				refreshAccountUnreadCounts();
+			});
 
 	//		this.additionalAccounts = koComputable(() => AccountUserStore.filter(account => account.isAdditional()));
 		}

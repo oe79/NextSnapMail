@@ -136,7 +136,15 @@ trait Accounts
 
 	public function DoAccountUnread(): array
 	{
-		$oImapClient = $this->loadAdditionalAccountImapClient($this->GetActionParam('email', ''));
+		$sEmail = IDN::emailToAscii(\trim($this->GetActionParam('email', '')));
+		$oMainAccount = $this->getMainAccountFromToken();
+		if ($sEmail === $oMainAccount->Email()) {
+			$oImapClient = new \MailSo\Imap\ImapClient;
+			$oImapClient->SetLogger($this->Logger());
+			$this->imapConnect($oMainAccount, false, $oImapClient);
+		} else {
+			$oImapClient = $this->loadAdditionalAccountImapClient($sEmail);
+		}
 		$oInfo = $oImapClient->FolderStatus('INBOX');
 		return $this->DefaultResponse([
 			'unreadEmails' => \max(0, $oInfo->UNSEEN)
