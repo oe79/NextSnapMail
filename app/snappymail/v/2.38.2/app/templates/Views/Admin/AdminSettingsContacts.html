@@ -47,7 +47,7 @@
 			<label data-i18n="TAB_CONTACTS/LABEL_STORAGE_DSN"></label>
 			<div>
 				<input type="text" class="span6" autocomplete="off" autocorrect="off" autocapitalize="off"
-					data-bind="value: contactsPdoDsn, saveTrigger: contactsPdoDsnTrigger" placeholder="mysql:host=127.0.0.1;port=3306;dbname=snappymail">
+					data-bind="value: contactsPdoDsn, saveTrigger: contactsPdoDsnTrigger" placeholder="mysql:host=127.0.0.1;port=3306;dbname=nextsnapmail">
 			</div>
 		</div>
 		<div class="control-group">
@@ -106,7 +106,8 @@
 		<div class="control-group">
 			<label></label>
 			<a class="btn" data-bind="command: testContactsCommand, css: { 'btn-success': testContactsSuccess, 'btn-danger': testContactsError }">
-				<i class="fontastic" data-bind="css: {'icon-spinner': testing()}">ℹ</i>
+					<span class="nextsnapmail-material-icon nextsnapmail-icon-information" data-bind="visible: !testing()" aria-hidden="true"></span>
+					<i class="icon-spinner" data-bind="visible: testing"></i>
 				<span data-i18n="GLOBAL/TEST"></span>
 			</a>
 		</div>

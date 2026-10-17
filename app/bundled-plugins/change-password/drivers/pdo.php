@@ -70,8 +70,25 @@ class ChangePasswordDriverPDO
 				\PDO::ATTR_ERRMODE           => \PDO::ERRMODE_EXCEPTION,
 			);
 			if ($this->oConfig->Get('plugin', 'pdo_mysql_ssl', false)) {
-				$pdo_attr[\PDO::MYSQL_ATTR_SSL_CA]                 = $this->oConfig->Get('plugin', 'pdo_mysql_ssl_ca', '');
-				$pdo_attr[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $this->oConfig->Get('plugin', 'pdo_mysql_ssl_verify', true);
+				$mysqlAttribute = static function (string $name) : ?int {
+					$modern = 'Pdo\\Mysql::ATTR_' . $name;
+					if (\defined($modern)) {
+						return \constant($modern);
+					}
+
+					$legacy = 'PDO::MYSQL_ATTR_' . $name;
+					return \defined($legacy) ? \constant($legacy) : null;
+				};
+
+				$sslCaAttribute = $mysqlAttribute('SSL_CA');
+				if (null !== $sslCaAttribute) {
+					$pdo_attr[$sslCaAttribute] = $this->oConfig->Get('plugin', 'pdo_mysql_ssl_ca', '');
+				}
+
+				$sslVerifyAttribute = $mysqlAttribute('SSL_VERIFY_SERVER_CERT');
+				if (null !== $sslVerifyAttribute) {
+					$pdo_attr[$sslVerifyAttribute] = $this->oConfig->Get('plugin', 'pdo_mysql_ssl_verify', true);
+				}
 			}
 
 			$conn = new \PDO(

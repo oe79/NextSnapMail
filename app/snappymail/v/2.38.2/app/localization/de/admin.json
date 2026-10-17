@@ -83,7 +83,7 @@
 		"LEGEND_DOMAINS": "Domains",
 		"BUTTON_ADD_DOMAIN": "Domain hinzufügen",
 		"BUTTON_ADD_ALIAS": "Alias hinzufügen",
-		"DELETE_ARE_YOU_SURE": "Sind Sie sicher?",
+		"DELETE_ARE_YOU_SURE": "Wirklich löschen?",
 		"HTML_DOMAINS_HELPER": "Liste der Domains, die Webmail-Nutzer verwenden dürfen.\n<br>\nKlicken Sie auf den Namen, um die Domain zu konfigurieren."
 	},
 	"TAB_SECURITY": {
@@ -97,14 +97,19 @@
 		"LABEL_REPEAT_PASSWORD": "Wiederholen",
 		"LABEL_REQUIRE_VERIFICATION": "Signiertes SSL-Zertifikat erfordern",
 		"CRYPTO": "Kryptographie",
-		"LABEL_ALLOW_SELF_SIGNED": "Selbst-signiertes Zertifikat akzeptieren"
+		"LABEL_ALLOW_SELF_SIGNED": "Selbst-signiertes Zertifikat akzeptieren",
+		"NEXTCLOUD_ADMIN_ACCESS": "Nextcloud-Administratorzugang",
+		"NEXTCLOUD_ADMIN_ACCESS_INFO": "Dieser Administrationsbereich wird durch die aktive Nextcloud-Administratorsitzung geschützt. Ein separates NextSnapMail-Administratorpasswort wird nicht verwendet."
 	},
 	"TAB_PACKAGES": {
 		"LABEL_ENABLE_PLUGINS": "Erweiterungen aktivieren",
 		"LEGEND_AVAILABLE_FOR_UPDATE": "Zur Aktualisierung verfügbar",
 		"LEGEND_AVAILABLE_FOR_INSTALLATION": "Zur Installation verfügbar",
 		"LEGEND_INSTALLED_PACKAGES": "Installierte Erweiterungen",
-		"ALERT_CANNOT_ACCESS_REPOSITORY": "Momentan kann nicht auf das Repository zugegriffen werden."
+		"ALERT_CANNOT_ACCESS_REPOSITORY": "Momentan kann nicht auf das Repository zugegriffen werden.",
+		"ACTION_CONFIGURE": "Konfigurieren",
+		"ACTION_INSTALL": "Installieren",
+		"ACTION_DELETE": "Löschen"
 	},
 	"TAB_ABOUT": {
 		"LEGEND_ABOUT": "Über",
@@ -148,7 +153,9 @@
 		"NEW_DOMAIN_DESC": "Diese Domain-Konfiguration erlaubt die Verwendung von <strong>%NAME%<\/strong> Mail-Adressen.",
 		"WHITE_LIST_ALERT": "Liste der Domain-User, die Webmail verwenden dürfen.\nVerwenden Sie Leerzeichen als Trennsymbol.",
 		"VALID_SPAM_HEADERS": "Spam-Header beachten",
-		"VALID_VIRUS_HEADERS": "Virus-Header beachten"
+		"VALID_VIRUS_HEADERS": "Virus-Header beachten",
+		"TEST_RESULT_SUCCESS": "Verbindungstest erfolgreich",
+		"TEST_RESULT_FAILED": "Verbindungstest fehlgeschlagen"
 	},
 	"POPUPS_PLUGIN": {
 		"TITLE_PLUGIN": "Erweiterung",

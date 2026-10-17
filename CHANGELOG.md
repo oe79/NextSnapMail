@@ -1,3 +1,74 @@
+## 0.1.14 – 2026-10-17
+
+### Added
+
+- Begin the native Nextcloud administration integration: the complete existing
+  domain and webmail configuration is available directly from the NextSnapMail
+  administration section without a second administrator login.
+- Add a dedicated Nextcloud-admin-only endpoint for every embedded
+  administration request.
+- Add a page-based administration navigation for domains and Google OAuth,
+  webmail settings, extensions, Nextcloud integration, and data migration.
+
+### Changed
+
+- Hide the redundant embedded SnappyMail administration sidebar and logout
+  controls in favor of the NextSnapMail navigation.
+- Move Google OAuth settings next to the mail-domain configuration and place
+  import and reset operations on their own administration page.
+- Present all former webmail administration subsections in the main
+  NextSnapMail navigation and use SnappyMail's actual `settings/*` routes so
+  existing domains and domain creation remain available.
+- Restyle embedded administration forms, tables, dialogs, controls and domain
+  actions to match the Nextcloud interface more closely.
+- Treat the bundled Nextcloud integration as an internal system module: load it
+  independently of optional plugin support and hide it from the extension list.
+- Move the configurable contact-suggestion and calendar options of that system
+  module into the regular Nextcloud integration settings.
+- Replace legacy extension action glyphs with Material Design icons and hide
+  activation controls for extensions that are not installed.
+- Reorder the integrated administration navigation and consistently use
+  Nextcloud-style Material icons and NextSnapMail branding throughout it.
+- Show mail-domain management before the Google OAuth configuration and remove
+  the obsolete iframe-mode choice from the visible Nextcloud administration.
+- Keep `rainloop.user` and `nextsnapmail.user` independently selectable and
+  editable during normal filter changes. Merge the legacy filters and remove
+  `rainloop.user` only after the user explicitly starts a successful migration.
+
+### Fixed
+
+- Use the driver-specific `Pdo\Mysql` SSL constants on current PHP versions
+  while retaining compatibility fallbacks for older PHP releases, preventing
+  PHP 8.5 deprecation warnings from the database and password-plugin PDO
+  connections (issue #56).
+- Preserve visible message content wrapped in leaked MJML `mj-raw` elements
+  while continuing to sanitize the contained HTML normally (issue #55).
+- Prevent additional mail accounts from replacing the shared CardDAV URL and
+  credentials. CardDAV settings are read-only while an additional account is
+  active and server-side requests attempting to change them are rejected.
+- Preserve Sieve model class names in the minified JavaScript bundle so server
+  scripts and filters are recognized outside debug mode (issue #54).
+- Show a clear IMAP, SMTP and optional Sieve result after testing a domain
+  configuration.
+- Close every administration dialog reliably when a Nextcloud theme suppresses
+  SnappyMail's original closing transition.
+- Close the domain-test credentials dialog directly after testing or
+  cancelling instead of depending on a browser animation event.
+- Make the confirmation action in the domain connection-test credentials
+  dialog close reliably while retaining form submission with the Enter key.
+- Save newly created filters reliably when the Done button is used.
+
+### Security
+
+- Require an active Nextcloud administrator session for the integrated admin
+  page and all of its follow-up API requests while retaining SnappyMail's own
+  request token validation.
+- Protect the legacy administration URL and its service requests with the same
+  Nextcloud administrator check, making the separate SnappyMail administrator
+  password unnecessary for this Nextcloud-only app.
+- Reject attempts to disable, delete or replace the mandatory Nextcloud system
+  module through package-management endpoints.
+
 ## 0.1.13 – 2026-10-07
 
 ### Added

@@ -1173,7 +1173,7 @@
 								if (vmDom.classList.contains('animate')) {
 									vm.afterShow?.();
 									fireEvent('rl-vm-visible', vm);
-								} else {
+								} else if (vmDom.open) {
 									vmDom.close();
 									vm.afterHide?.();
 	//								fireEvent('rl-vm-hidden', vm);
@@ -1201,6 +1201,13 @@
 								vm.onHide?.();
 								vm.keyScope.unset();
 								vmDom.classList.remove('animate'); // trigger the transitions
+								// Nextcloud themes may override the transition, in which case
+								// no transitionend event is emitted. Close immediately so the
+								// native modal layer never keeps the underlying popup inert.
+								if (vmDom.open) {
+									vmDom.close();
+									vm.afterHide?.();
+								}
 							}
 							arePopupsVisible(0 < visiblePopups.size);
 						});
@@ -1985,6 +1992,8 @@
 				testingImapError: false,
 				testingSieveError: false,
 				testingSmtpError: false,
+				testingResultSuccess: false,
+				testingResultText: '',
 
 				imapHostFocus: false,
 				sieveHostFocus: false,
@@ -2123,15 +2132,44 @@
 						(iError, oData) => {
 							this.testing(false);
 							if (iError) {
-								this.testingImapError(getNotification(iError));
-								this.testingSieveError(getNotification(iError));
-								this.testingSmtpError(getNotification(iError));
+								const error = getNotification(iError)
+									|| i18n('ERRORS/UNKNOWN_ERROR', null, 'Unknown error');
+								this.testingDone(true);
+								this.testingImapError(error);
+								this.testingSieveError(error);
+								this.testingSmtpError(error);
+								this.testingResultSuccess(false);
+								this.testingResultText(
+									i18n('POPUPS_DOMAIN/TEST_RESULT_FAILED', null, 'Connection test failed')
+									+ ': ' + error
+								);
 							} else {
 								const result = oData.Result;
 								this.testingDone(true);
 								this.testingImapError(true !== result.Imap ? result.Imap : false);
 								this.testingSieveError(true !== result.Sieve ? result.Sieve : false);
 								this.testingSmtpError(true !== result.Smtp ? result.Smtp : false);
+								const services = [
+									['IMAP', this.testingImapError()],
+									['SMTP', this.testingSmtpError()]
+								];
+								if (this.sieveEnabled()) {
+									services.push(['SIEVE', this.testingSieveError()]);
+								}
+								const successful = services.every(service => !service[1]);
+								this.testingResultSuccess(successful);
+								this.testingResultText(
+									i18n(
+										successful
+											? 'POPUPS_DOMAIN/TEST_RESULT_SUCCESS'
+											: 'POPUPS_DOMAIN/TEST_RESULT_FAILED',
+										null,
+										successful ? 'Connection test successful' : 'Connection test failed'
+									)
+									+ ': '
+									+ services.map(service => service[0] + ' '
+										+ (service[1] ? '✕ (' + pString(service[1]) + ')' : '✓')).join(' · ')
+								);
 								// result.ImapResult.connectCapa
 								if (true === result.Imap) {
 									let capa = result.ImapResult.authCapa
@@ -2158,6 +2196,8 @@
 			this.testingImapError(false);
 			this.testingSieveError(false);
 			this.testingSmtpError(false);
+			this.testingResultSuccess(false);
+			this.testingResultText('');
 		}
 
 		autoconfig() {

@@ -62,15 +62,31 @@ abstract class Base
 
 		$options = [];
 		if ('mysql' === $oSettings->driver) {
-			if ($oSettings->sslCa) {
-				$options[\PDO::MYSQL_ATTR_SSL_CA] = $oSettings->sslCa;
+			// Driver-specific constants moved from PDO to Pdo\Mysql in PHP 8.4.
+			// The PDO aliases are deprecated as of PHP 8.5, so only use them
+			// as a compatibility fallback on older PHP versions.
+			$mysqlAttribute = static function (string $name) : ?int {
+				$modern = 'Pdo\\Mysql::ATTR_' . $name;
+				if (\defined($modern)) {
+					return \constant($modern);
+				}
+
+				$legacy = 'PDO::MYSQL_ATTR_' . $name;
+				return \defined($legacy) ? \constant($legacy) : null;
+			};
+
+			$sslCaAttribute = $mysqlAttribute('SSL_CA');
+			if ($oSettings->sslCa && null !== $sslCaAttribute) {
+				$options[$sslCaAttribute] = $oSettings->sslCa;
 			}
 			// PHP 8.0 https://github.com/the-djmaze/snappymail/issues/1205
-			if (\defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')) {
-				$options[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $oSettings->sslVerify;
+			$sslVerifyAttribute = $mysqlAttribute('SSL_VERIFY_SERVER_CERT');
+			if (null !== $sslVerifyAttribute) {
+				$options[$sslVerifyAttribute] = $oSettings->sslVerify;
 			}
-			if ($oSettings->sslCiphers) {
-				$options[\PDO::MYSQL_ATTR_SSL_CIPHER] = $oSettings->sslCiphers;
+			$sslCipherAttribute = $mysqlAttribute('SSL_CIPHER');
+			if ($oSettings->sslCiphers && null !== $sslCipherAttribute) {
+				$options[$sslCipherAttribute] = $oSettings->sslCiphers;
 			}
 /*
 			$options[\PDO::MYSQL_ATTR_SSL_CAPATH] = '';

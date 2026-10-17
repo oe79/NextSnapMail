@@ -83,7 +83,7 @@
 		"LEGEND_DOMAINS": "Domains",
 		"BUTTON_ADD_DOMAIN": "Add Domain",
 		"BUTTON_ADD_ALIAS": "Add Alias",
-		"DELETE_ARE_YOU_SURE": "Are you sure?",
+		"DELETE_ARE_YOU_SURE": "Delete?",
 		"HTML_DOMAINS_HELPER": "List of domains that are allowed.\n<br>\nClick on the name to configure the domain.\n"
 	},
 	"TAB_SECURITY": {
@@ -97,14 +97,19 @@
 		"LABEL_REPEAT_PASSWORD": "Repeat passphrase",
 		"LABEL_REQUIRE_VERIFICATION": "Require verification of SSL certificate",
 		"CRYPTO": "Crypto",
-		"LABEL_ALLOW_SELF_SIGNED": "Allow self signed certificates"
+		"LABEL_ALLOW_SELF_SIGNED": "Allow self signed certificates",
+		"NEXTCLOUD_ADMIN_ACCESS": "Nextcloud administrator access",
+		"NEXTCLOUD_ADMIN_ACCESS_INFO": "This administration area is protected by the active Nextcloud administrator session. A separate NextSnapMail administrator password is not used."
 	},
 	"TAB_PACKAGES": {
 		"LABEL_ENABLE_PLUGINS": "Enable extensions",
 		"LEGEND_AVAILABLE_FOR_UPDATE": "Available for Update",
 		"LEGEND_AVAILABLE_FOR_INSTALLATION": "Available for Installation",
 		"LEGEND_INSTALLED_PACKAGES": "Installed Extensions",
-		"ALERT_CANNOT_ACCESS_REPOSITORY": "Cannot access the repository at the moment."
+		"ALERT_CANNOT_ACCESS_REPOSITORY": "Cannot access the repository at the moment.",
+		"ACTION_CONFIGURE": "Configure",
+		"ACTION_INSTALL": "Install",
+		"ACTION_DELETE": "Delete"
 	},
 	"TAB_ABOUT": {
 		"LEGEND_ABOUT": "About",
@@ -148,7 +153,9 @@
 		"NEW_DOMAIN_DESC": "This domain configuration will allow you to work with <strong>%NAME%<\/strong> email addresses.",
 		"WHITE_LIST_ALERT": "List of domain users webmail is allowed to access.\nUse a space as delimiter.\n",
 		"VALID_SPAM_HEADERS": "Valid SPAM headers",
-		"VALID_VIRUS_HEADERS": "Valid virus headers"
+		"VALID_VIRUS_HEADERS": "Valid virus headers",
+		"TEST_RESULT_SUCCESS": "Connection test successful",
+		"TEST_RESULT_FAILED": "Connection test failed"
 	},
 	"POPUPS_PLUGIN": {
 		"TITLE_PLUGIN": "Extension",

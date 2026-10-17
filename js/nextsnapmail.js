@@ -20,6 +20,123 @@ document.onreadystatechange = () => {
 	}
 };
 
+function setupIntegratedAdminFrame()
+{
+	const iframe = document.getElementById('nextsnapmail-admin-frame');
+	if (!iframe) {
+		return;
+	}
+	const workspace = document.querySelector('[data-nextsnapmail-admin-workspace]');
+	const saveArea = document.querySelector('[data-nextsnapmail-save-area]');
+	const pageButtons = [...document.querySelectorAll('[data-nextsnapmail-page]')];
+	const pagePanels = [...document.querySelectorAll('[data-nextsnapmail-panel]')];
+	const contextPanels = [...document.querySelectorAll('[data-nextsnapmail-context]')];
+	const routeButtons = [...document.querySelectorAll('[data-nextsnapmail-admin-route]')];
+	const embeddedPages = new Set(['domains', 'webmail', 'extensions']);
+	const savePages = new Set(['domains', 'integration']);
+	let webmailRoute = 'general';
+
+	const setAdminRoute = route => {
+		const nextHash = '#/' + route;
+		if (iframe.contentWindow && iframe.contentWindow.location.hash !== nextHash) {
+			iframe.contentWindow.location.hash = nextHash;
+		}
+	};
+
+	const showPage = page => {
+		if (!pageButtons.some(button => button.dataset.nextsnapmailPage === page)) {
+			page = 'domains';
+		}
+
+		pageButtons.forEach(button => {
+			const active = button.dataset.nextsnapmailPage === page;
+			button.classList.toggle('active', active);
+			button.setAttribute('aria-current', active ? 'page' : 'false');
+		});
+		pagePanels.forEach(panel => {
+			const active = panel.dataset.nextsnapmailPanel === page;
+			panel.hidden = !active;
+			panel.classList.toggle('active', active);
+		});
+		contextPanels.forEach(panel => {
+			const active = panel.dataset.nextsnapmailContext === page;
+			panel.hidden = !active;
+			panel.classList.toggle('active', active);
+		});
+
+		if (workspace) {
+			workspace.hidden = !embeddedPages.has(page);
+		}
+		if (saveArea) {
+			saveArea.hidden = !savePages.has(page);
+		}
+
+		if ('domains' === page) {
+			setAdminRoute('domains');
+		} else if ('extensions' === page) {
+			setAdminRoute('packages');
+		} else if ('webmail' === page) {
+			setAdminRoute(webmailRoute);
+		}
+
+		try {
+			sessionStorage.setItem('nextsnapmail-admin-page', page);
+		} catch (error) {
+			// Storage may be disabled without affecting the settings page.
+		}
+	};
+
+	pageButtons.forEach(button => button.addEventListener('click', () => {
+		showPage(button.dataset.nextsnapmailPage);
+	}));
+
+	routeButtons.forEach(button => button.addEventListener('click', () => {
+		webmailRoute = button.dataset.nextsnapmailAdminRoute || 'general';
+		routeButtons.forEach(candidate => candidate.classList.toggle('active', candidate === button));
+		setAdminRoute(webmailRoute);
+	}));
+
+	iframe.addEventListener('load', () => {
+		try {
+			const iframeDocument = iframe.contentDocument;
+			iframeDocument?.documentElement?.classList.add('nextsnapmail-integrated-admin-document');
+			iframeDocument?.body?.classList.add('nextsnapmail-integrated-admin-body');
+			if (iframeDocument && !iframeDocument.getElementById('nextsnapmail-integrated-admin-style')) {
+				const style = iframeDocument.createElement('style');
+				style.id = 'nextsnapmail-integrated-admin-style';
+				style.textContent = `
+					#rl-left, #V-AdminPane > .b-toolbar { display: none !important; }
+					#rl-right { min-width: 100% !important; }
+					#V-AdminPane {
+						height: calc(100% - 16px) !important;
+						margin: 8px !important;
+						box-shadow: none !important;
+					}
+				`;
+				iframeDocument.head.appendChild(style);
+			}
+			const activePage = pageButtons.find(button => button.classList.contains('active'))?.dataset.nextsnapmailPage;
+			if ('extensions' === activePage) {
+				setAdminRoute('packages');
+			} else if ('webmail' === activePage) {
+				setAdminRoute(webmailRoute);
+			} else {
+				setAdminRoute('domains');
+			}
+		} catch (error) {
+			console.warn('Could not prepare integrated NextSnapMail administration.', error);
+		}
+	});
+
+	let initialPage = 'domains';
+	try {
+		initialPage = sessionStorage.getItem('nextsnapmail-admin-page') || initialPage;
+	} catch (error) {
+		// Keep the default page when storage is unavailable.
+	}
+	showPage(initialPage);
+}
+
 // Pass Nextcloud themes and theme attributes to SnappyMail on
 // first load and when the SnappyMail iframe is reloaded.
 function passThemesToIFrame() {

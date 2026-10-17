@@ -3,7 +3,7 @@
 	<id>nextsnapmail</id>
 	<name>NextSnapMail</name>
 	<summary>A SnappyMail fork focused on integration with Nextcloud</summary>
-	<version>0.1.13</version>
+	<version>0.1.14</version>
 	<licence>AGPL-3.0-only</licence>
 	<author homepage="https://github.com/oe79">Erhard Scharf</author>
 	<author homepage="https://github.com/the-djmaze/snappymail">SnappyMail contributors</author>
@@ -31,8 +31,9 @@ risk.
   per-sender reply intervals for the full absence, daily, weekly or custom use
 - **Safe multi-instance Sieve handling** that detects and preserves vacation
   settings created by another NextSnapMail instance and allows explicit removal
-- **Automatic migration of existing managed Sieve filters** from
-  `rainloop.user` to `nextsnapmail.user` while retaining the old script as a backup
+- **Explicit migration of existing managed Sieve filters** from
+  `rainloop.user` to `nextsnapmail.user`; both scripts remain independently
+  editable until the user deliberately starts the migration
 - **Almost all IMAP features** including advanced searching
 - **Integration with Nextcloud Unified Search**
 - **Integration with other Nextcloud apps** (Contacts, Files and Calendar)
@@ -40,6 +41,12 @@ risk.
 - **Integrated Gmail / Google OAuth2 login**, including main account setup from
   the personal settings and additional Gmail accounts from the webmail account
   menu
+- **Administration integrated into Nextcloud**, including mail domains, Google
+  OAuth, webmail settings, extensions and data migration without a separate
+  webmail administrator login
+- **Domain connection tests** with visible IMAP, SMTP and optional Sieve results
+- **Protected shared CardDAV settings** that cannot be overwritten while an
+  additional mail account is active
 - **Admin-assisted import from existing SnappyMail installations**, including
   stored mailbox credentials, additional accounts and app data
 - **Admin reset option** to remove NextSnapMail account settings and recreate a
@@ -51,8 +58,9 @@ risk.
 - **Many security features** (Sodium encrypted passwords, Sec-Fetch, TOTP 2FA, DKIM, prevent tracking, etc.)
 - **Kolab integrations**
 
-After enabling the app, administrators can configure the integration in the
-dedicated "NextSnapMail" section of the Nextcloud administration settings.
+After enabling the app, administrators can manage the complete webmail
+configuration in the dedicated "NextSnapMail" section of the Nextcloud
+administration settings without a separate webmail administrator login.
 Users can add their initial mailbox credentials in the dedicated
 "NextSnapMail" section of their personal settings.
 

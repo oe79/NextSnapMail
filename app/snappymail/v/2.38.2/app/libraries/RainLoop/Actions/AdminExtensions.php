@@ -12,12 +12,25 @@ trait AdminExtensions
 
 	public function DoAdminPackagesList() : array
 	{
-		return $this->DefaultResponse(Repository::getPackagesList());
+		$aPackages = Repository::getPackagesList();
+		if (isset($aPackages['List']) && \is_array($aPackages['List'])) {
+			$aPackages['List'] = \array_values(\array_filter(
+				$aPackages['List'],
+				static fn(array $aPackage): bool => 'nextcloud' !== \strtolower((string) ($aPackage['id'] ?? ''))
+			));
+		}
+
+		return $this->DefaultResponse($aPackages);
 	}
 
 	public function DoAdminPackageDelete() : array
 	{
-		return $this->DefaultResponse(Repository::deletePackage($this->GetActionParam('id', '')));
+		$sId = \strtolower((string) $this->GetActionParam('id', ''));
+		if ('nextcloud' === $sId) {
+			return $this->FalseResponse(Notifications::UnsupportedPluginPackage, 'The integrated Nextcloud system module cannot be deleted.');
+		}
+
+		return $this->DefaultResponse(Repository::deletePackage($sId));
 	}
 
 	public function DoAdminPackageInstall() : array
@@ -38,6 +51,9 @@ trait AdminExtensions
 
 		$sId = (string) $this->GetActionParam('id', '');
 		$bDisable = '1' === (string) $this->GetActionParam('disabled', '1');
+		if ('nextcloud' === \strtolower($sId) && $bDisable) {
+			return $this->FalseResponse(Notifications::UnsupportedPluginPackage, 'The integrated Nextcloud system module cannot be disabled.');
+		}
 
 		if (!$bDisable) {
 			$oPlugin = $this->Plugins()->CreatePluginByName($sId);

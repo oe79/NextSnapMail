@@ -39,6 +39,12 @@ trait Contacts
 	public function DoSaveContactsSyncData() : array
 	{
 		$oAccount = $this->getAccountFromToken();
+		if ($oAccount instanceof \RainLoop\Model\AdditionalAccount) {
+			return $this->FalseResponse(
+				\RainLoop\Notifications::ClientViewError,
+				'CardDAV synchronization settings can only be changed from the main account.'
+			);
+		}
 
 		$oAddressBookProvider = $this->AddressBookProvider($oAccount);
 		if (!$oAddressBookProvider || !$oAddressBookProvider->IsActive()) {

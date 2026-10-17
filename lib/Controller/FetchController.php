@@ -157,6 +157,17 @@ class FetchController extends Controller {
 			$oConfig->Set('login', 'allow_languages_on_login', empty($_POST['nextsnapmail-nc-lang']));
 			$oConfig->Save();
 
+			$oNextcloudPlugin = \RainLoop\Api::Actions()->Plugins()->CreatePluginByName('nextcloud');
+			if ($oNextcloudPlugin) {
+				$oNextcloudPluginConfig = $oNextcloudPlugin->Config();
+				$oNextcloudPluginConfig->Set('plugin', 'suggestions', isset($_POST['nextcloud-plugin-suggestions']));
+				$oNextcloudPluginConfig->Set('plugin', 'ignoreSystemAddressbook', isset($_POST['nextcloud-plugin-ignore-system-addressbook']));
+				$oNextcloudPluginConfig->Set('plugin', 'calendar', isset($_POST['nextcloud-plugin-calendar']));
+				if (!$oNextcloudPluginConfig->Save()) {
+					throw new \RuntimeException($this->l->t('Could not save the Nextcloud integration settings.'));
+				}
+			}
+
 			if (!empty($_POST['import-rainloop'])) {
 				return new JSONResponse([
 					'status' => 'success',

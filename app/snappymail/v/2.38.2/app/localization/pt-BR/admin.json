@@ -47,7 +47,7 @@
 		"LABEL_MESSAGES_PER_PAGE_ENFORCED": "Force messages per page for all users",
 		"LABEL_ALLOW_ADDITIONAL_ACCOUNTS": "Permitir contas adicionais",
 		"LABEL_ALLOW_IDENTITIES": "Permitir identidades multiplas",
-		"ALERT_DATA_ACCESS": "A pasta de dados SnappyMail está acessível. Por favor configure o seu servidor web para esconder a pasta de dados do acesso externo. Leia mais aqui:",
+		"ALERT_DATA_ACCESS": "A pasta de dados NextSnapMail está acessível. Por favor configure o seu servidor web para esconder a pasta de dados do acesso externo. Leia mais aqui:",
 		"ALERT_WARNING": "Aviso!",
 		"HTML_ALERT_WEAK_PASSWORD": "Você está usando a senha administrativa padrão.\n<br>\nPor motivo de segurança por favor\n<strong><a href=\"#\/security\">troque a senha<\/a><\/strong>\nagora.\n"
 	},
@@ -111,7 +111,7 @@
 		"LABEL_TAG_HINT": "Leitor de email web simples, moderno & rápido.",
 		"LABEL_ALL_RIGHTS_RESERVED": "Todos os direitos reservados.",
 		"HINT_READ_CHANGE_LOG": "Por favor, leia o registro de alterações antes de atualizar.",
-		"HINT_IS_UP_TO_DATE": "SnappyMail está atualizado.",
+		"HINT_IS_UP_TO_DATE": "NextSnapMail está atualizado.",
 		"HTML_NEW_VERSION": "Está disponível uma nova versão: <b>%VERSION%<\/b>.",
 		"LABEL_UPDATING": "Atualizando",
 		"LABEL_CHECKING": "Checar por atualizações",

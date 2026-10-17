@@ -848,7 +848,8 @@
 				exists: false,
 				nameError: false,
 				askDelete: false,
-				hasChanges: false
+				hasChanges: false,
+				migrating: false
 			});
 
 			this.filters = koArrayWithDestroy();
@@ -896,6 +897,14 @@
 
 		isPreferredFiltersScript() {
 			return SIEVE_FILE_NAME === this.name();
+		}
+
+		isLegacyFiltersScript() {
+			return LEGACY_SIEVE_FILE_NAME === this.name();
+		}
+
+		migrateToNextSnapMail() {
+			window.Sieve.migrateLegacyScript(this);
 		}
 
 		/**
@@ -3886,12 +3895,17 @@
 		}
 
 		addFilter() {
-			/* this = SieveScriptModel */
+			// Knockout may invoke this handler with either the popup or the script
+			// as its context, depending on where the button is rendered.
+			const script = 'function' === typeof this.script ? this.script() : this;
 			const filter = new FilterModel();
 			filter.generateID();
 			FilterPopupView.showModal([
 				filter,
-				() => this.filters.push(filter.assignTo())
+				() => {
+					script.filters.push(filter.assignTo());
+					script.hasChanges(true);
+				}
 			]);
 		}
 
@@ -4000,6 +4014,83 @@
 						: scripts.remove(script)
 				,
 				{name:script.name()}
+			);
+		},
+
+		migrateLegacyScript: legacyScript => {
+			if (!legacyScript?.isLegacyFiltersScript() || legacyScript.migrating()) {
+				return;
+			}
+
+			serverError(false);
+			legacyScript.migrating(true);
+			const preferredScript = scripts.find(script => script.isPreferredFiltersScript()),
+				mergedFilters = [],
+				positions = new Map();
+
+			[...(preferredScript?.filters() || []), ...legacyScript.filters()].forEach(filter => {
+				const key = filter.id || JSON.stringify(filter.toJSON());
+				if (positions.has(key)) {
+					mergedFilters[positions.get(key)] = filter;
+				} else {
+					positions.set(key, mergedFilters.length);
+					mergedFilters.push(filter);
+				}
+			});
+
+			const migratedScript = new SieveScriptModel();
+			migratedScript.name(SIEVE_FILE_NAME);
+			migratedScript.filters(mergedFilters);
+			migratedScript.body(
+				preferredScript && managedVacationBlock(preferredScript.body())
+					? preferredScript.body()
+					: legacyScript.body()
+			);
+
+			const fail = (error, data) => {
+				legacyScript.migrating(false);
+				setError(data?.messageAdditional || getNotification(error));
+			},
+				shouldActivate = legacyScript.active() || preferredScript?.active(),
+				finish = () => {
+					legacyScript.migrating(false);
+					window.Sieve.updateList();
+				};
+			const removeLegacy = () => Remote.request('FiltersScriptDelete',
+				(error, data) => {
+					if (error) {
+						fail(error, data);
+					} else if (shouldActivate) {
+						// Some ManageSieve servers clear the active marker while deleting
+						// the formerly active legacy script. Assert the target once more.
+						Remote.request('FiltersScriptActivate',
+							(activateError, activateData) => activateError ? fail(activateError, activateData) : finish(),
+							{name: SIEVE_FILE_NAME}
+						);
+					} else {
+						finish();
+					}
+				},
+				{name: LEGACY_SIEVE_FILE_NAME}
+			);
+			const activateAndRemove = () => {
+				if (shouldActivate) {
+					Remote.request('FiltersScriptActivate',
+						(error, data) => error ? fail(error, data) : removeLegacy(),
+						{name: SIEVE_FILE_NAME}
+					);
+				} else {
+					removeLegacy();
+				}
+			};
+
+			Remote.request('FiltersScriptSave',
+				(error, data) => error ? fail(error, data) : activateAndRemove(),
+				{
+					name: SIEVE_FILE_NAME,
+					active: shouldActivate || false,
+					body: migratedScript.filtersToRaw()
+				}
 			);
 		},
 
