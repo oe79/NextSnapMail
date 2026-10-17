@@ -1,5 +1,5 @@
 <header>
-	<a href="#" class="close" data-bind="click: close">×</a>
+	<a href="#" class="close" data-bind="click: close"><span class="nextsnapmail-material-icon nextsnapmail-icon-close" aria-hidden="true"></span></a>
 	<h3 data-i18n="POPUPS_DOMAIN_ALIAS/TITLE_ADD_DOMAIN_ALIAS"></h3>
 </header>
 <form id="DomainAlias" class="modal-body" spellcheck="false" autocomplete="off" autocapitalize="none" data-bind="submit: createCommand" >
@@ -25,9 +25,9 @@
 	</div>
 </form>
 <footer>
-	<button class="btn buttonClose" data-bind="click: close" data-icon="✖" data-i18n="GLOBAL/CLOSE"></button>
-	<button class="btn" data-bind="command: createCommand">
-		<i class="fontastic" data-bind="visible: !saving()">✚</i>
+	<button class="btn buttonClose nextsnapmail-icon-button" data-bind="click: close"><span class="nextsnapmail-material-icon nextsnapmail-icon-close" aria-hidden="true"></span><span data-i18n="GLOBAL/CLOSE"></span></button>
+	<button class="btn nextsnapmail-icon-button" data-bind="command: createCommand">
+		<span class="nextsnapmail-material-icon nextsnapmail-icon-plus" data-bind="visible: !saving()" aria-hidden="true"></span>
 		<i class="icon-spinner" data-bind="visible: saving"></i>
 		<span data-i18n="GLOBAL/ADD"></span>
 	</button>

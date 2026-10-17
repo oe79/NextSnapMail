@@ -1,0 +1,619 @@
+/* Nextcloud-style presentation for the integrated NextSnapMail administration. */
+.nextsnapmail-admin-settings {
+	max-width: 1320px;
+}
+
+.nextsnapmail-admin-settings [hidden] {
+	display: none !important;
+}
+
+.nextsnapmail-admin-navigation,
+.nextsnapmail-webmail-navigation {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 1.25rem 0;
+}
+
+.nextsnapmail-admin-navigation-item,
+.nextsnapmail-webmail-navigation button {
+	min-height: 38px;
+	margin: 0;
+	padding: 0.45rem 0.85rem;
+	border: 1px solid var(--color-border-maxcontrast, #8c8c8c);
+	border-radius: var(--border-radius-pill, 18px);
+	background: var(--color-main-background, #fff);
+	color: var(--color-main-text, #222);
+	font-weight: 600;
+}
+
+.nextsnapmail-admin-navigation-item:hover,
+.nextsnapmail-admin-navigation-item:focus,
+.nextsnapmail-webmail-navigation button:hover,
+.nextsnapmail-webmail-navigation button:focus {
+	background: var(--color-background-hover, #f2f2f2);
+}
+
+.nextsnapmail-admin-navigation-item.active,
+.nextsnapmail-webmail-navigation button.active {
+	border-color: var(--color-primary-element, #00679e);
+	background: var(--color-primary-element, #00679e);
+	color: var(--color-primary-element-text, #fff);
+}
+
+.nextsnapmail-admin-page,
+.nextsnapmail-admin-context,
+.nextsnapmail-integrated-admin,
+.nextsnapmail-save-area {
+	width: min(100%, 1280px);
+}
+
+.nextsnapmail-admin-page > h3 {
+	margin-top: 1.5rem;
+}
+
+.nextsnapmail-webmail-navigation {
+	margin-top: 0.75rem;
+}
+
+.nextsnapmail-webmail-navigation button {
+	min-height: 32px;
+	padding: 0.3rem 0.7rem;
+	font-size: 0.9rem;
+}
+
+.nextsnapmail-integrated-admin {
+	margin: 0.75rem 0 1.5rem;
+}
+
+#nextsnapmail-admin-frame {
+	display: block;
+	width: 100%;
+	height: min(720px, calc(100vh - 230px));
+	min-height: 540px;
+	border: 1px solid var(--color-border, #d8d8d8);
+	border-radius: var(--border-radius-large, 10px);
+	background: var(--color-main-background, #fff);
+}
+
+.nextsnapmail-settings-card {
+	box-sizing: border-box;
+	margin: 1rem 0;
+	padding: 1.25rem;
+	border: 1px solid var(--color-border, #d8d8d8);
+	border-radius: var(--border-radius-large, 10px);
+	background: var(--color-main-background, #fff);
+}
+
+.nextsnapmail-settings-card h3:first-child {
+	margin-top: 0;
+}
+
+.nextsnapmail-settings-card p {
+	margin: 0.85rem 0;
+}
+
+.nextsnapmail-settings-card label[for="nextsnapmail-gmail-oauth-client-id"],
+.nextsnapmail-settings-card label[for="nextsnapmail-gmail-oauth-client-secret"],
+.nextsnapmail-settings-card label[for="nextsnapmail-gmail-oauth-domains"],
+.nextsnapmail-settings-card label[for="nextsnapmail-app_path"] {
+	display: block;
+}
+
+#nextsnapmail-gmail-oauth-client-id,
+#nextsnapmail-gmail-oauth-client-secret,
+#nextsnapmail-gmail-oauth-domains,
+#nextsnapmail-app_path {
+	box-sizing: border-box;
+	width: min(100%, 44rem);
+	margin-top: 0.35rem;
+}
+
+.nextsnapmail-callback-url code {
+	display: block;
+	max-width: 100%;
+	margin-top: 0.35rem;
+	overflow-wrap: anywhere;
+}
+
+.nextsnapmail-radio-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+}
+
+.nextsnapmail-radio-row input {
+	flex: 0 0 auto;
+}
+
+.nextsnapmail-danger-zone {
+	margin-top: 1.5rem;
+	border-color: var(--color-error, #d32f2f);
+}
+
+#nextsnapmail-reset-button {
+	border-color: var(--color-error, #d32f2f);
+	background: var(--color-error, #d32f2f);
+	color: #fff;
+}
+
+.nextsnapmail-save-area {
+	margin-top: 1.25rem;
+}
+
+@media (max-width: 700px) {
+	.nextsnapmail-admin-navigation {
+		flex-direction: column;
+	}
+
+	.nextsnapmail-admin-navigation-item {
+		width: 100%;
+		text-align: left;
+	}
+
+	#nextsnapmail-admin-frame {
+		height: 680px;
+	}
+}
+
+/* Styles below are also loaded inside the same-origin administration iframe. */
+.nextsnapmail-integrated-admin-document,
+.nextsnapmail-integrated-admin-body {
+	background: transparent !important;
+	color: var(--color-main-text, #222) !important;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+#rl-left,
+#V-AdminPane > .b-toolbar {
+	display: none !important;
+}
+
+#rl-right {
+	min-width: 100% !important;
+}
+
+#V-AdminPane {
+	box-sizing: border-box !important;
+	height: calc(100% - 16px) !important;
+	margin: 8px !important;
+	padding: 20px !important;
+	border: 0 !important;
+	border-radius: var(--border-radius-large, 10px) !important;
+	background: var(--color-main-background, #fff) !important;
+	box-shadow: none !important;
+}
+
+#V-AdminPane .legend {
+	margin: 1.5rem 0 1rem !important;
+	padding-bottom: 0.45rem !important;
+	border-bottom: 1px solid var(--color-border, #d8d8d8) !important;
+	font-size: 1.25rem !important;
+	font-weight: 600 !important;
+	line-height: 1.4 !important;
+}
+
+#V-AdminPane .legend:first-child {
+	margin-top: 0 !important;
+}
+
+#V-AdminPane .form-horizontal .control-group {
+	display: grid !important;
+	grid-template-columns: minmax(180px, 260px) minmax(220px, 520px) !important;
+	align-items: center !important;
+	gap: 0.5rem 1rem !important;
+	margin: 0 0 1rem !important;
+}
+
+#V-AdminPane .form-horizontal .control-group > label {
+	box-sizing: border-box !important;
+	width: auto !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	text-align: left !important;
+	font-weight: 600 !important;
+}
+
+#V-AdminPane .form-horizontal .control-group > *:not(label) {
+	margin-left: 0 !important;
+}
+
+#V-AdminPane input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+#V-AdminPane select,
+#V-AdminPane .select,
+#V-AdminPane textarea,
+dialog input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+dialog select,
+dialog .select,
+dialog textarea {
+	box-sizing: border-box !important;
+	min-height: 36px !important;
+	max-width: 100% !important;
+	padding: 6px 10px !important;
+	border: 2px solid var(--color-border-maxcontrast, #8c8c8c) !important;
+	border-radius: var(--border-radius-large, 10px) !important;
+	background-color: var(--color-main-background, #fff) !important;
+	box-shadow: none !important;
+	color: var(--color-main-text, #222) !important;
+}
+
+#V-AdminPane input:focus,
+#V-AdminPane select:focus,
+#V-AdminPane textarea:focus,
+dialog input:focus,
+dialog select:focus,
+dialog textarea:focus {
+	border-color: var(--color-primary-element, #00679e) !important;
+	outline: 2px solid color-mix(in srgb, var(--color-primary-element, #00679e) 25%, transparent) !important;
+}
+
+#V-AdminPane .btn,
+#V-AdminPane button,
+dialog .btn,
+dialog button {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	min-height: 34px !important;
+	padding: 6px 12px !important;
+	border: 1px solid var(--color-border-maxcontrast, #8c8c8c) !important;
+	border-radius: var(--border-radius-pill, 18px) !important;
+	background: var(--color-background-dark, #ededed) !important;
+	color: var(--color-main-text, #222) !important;
+	text-decoration: none !important;
+}
+
+#V-AdminPane .btn:hover,
+#V-AdminPane button:hover,
+dialog .btn:hover,
+dialog button:hover {
+	background: var(--color-background-hover, #e5e5e5) !important;
+}
+
+#V-AdminPane .btn-danger,
+dialog .btn-danger {
+	border-color: var(--color-error, #d32f2f) !important;
+	background: var(--color-error, #d32f2f) !important;
+	color: #fff !important;
+}
+
+#V-AdminPane .alert,
+dialog .alert,
+.nextsnapmail-admin-access-info {
+	box-sizing: border-box !important;
+	max-width: 760px !important;
+	padding: 0.9rem 1rem !important;
+	border: 1px solid var(--color-border, #d8d8d8) !important;
+	border-radius: var(--border-radius-large, 10px) !important;
+	background: var(--color-background-hover, #f5f5f5) !important;
+}
+
+#V-Settings-Domains table {
+	width: min(100%, 900px) !important;
+	border-collapse: separate !important;
+	border-spacing: 0 6px !important;
+}
+
+#V-Settings-Domains tbody tr {
+	background: var(--color-background-hover, #f5f5f5) !important;
+}
+
+#V-Settings-Domains tbody td {
+	padding: 10px 12px !important;
+	border-top: 1px solid var(--color-border, #d8d8d8) !important;
+	border-bottom: 1px solid var(--color-border, #d8d8d8) !important;
+	vertical-align: middle !important;
+}
+
+#V-Settings-Domains tbody td:first-child {
+	border-left: 1px solid var(--color-border, #d8d8d8) !important;
+	border-radius: var(--border-radius-large, 10px) 0 0 var(--border-radius-large, 10px) !important;
+}
+
+#V-Settings-Domains tbody td:last-child {
+	border-right: 1px solid var(--color-border, #d8d8d8) !important;
+	border-radius: 0 var(--border-radius-large, 10px) var(--border-radius-large, 10px) 0 !important;
+}
+
+#V-Settings-Domains .domain-name {
+	font-weight: 600 !important;
+}
+
+#V-Settings-Domains .domain-edit {
+	display: inline-block !important;
+	width: 18px !important;
+	height: 18px !important;
+	margin-left: 0.65rem !important;
+	opacity: 0.55 !important;
+}
+
+#V-Settings-Domains .e-action:hover .domain-edit {
+	opacity: 1 !important;
+	color: var(--color-primary-element, #00679e) !important;
+}
+
+#V-Settings-Domains .button-confirm-delete:not(.delete-access) {
+	display: none !important;
+}
+
+#V-Settings-Domains .button-confirm-delete.delete-access {
+	display: inline-flex !important;
+}
+
+dialog {
+	border: 1px solid var(--color-border, #d8d8d8) !important;
+	border-radius: var(--border-radius-large, 12px) !important;
+	background: var(--color-main-background, #fff) !important;
+	color: var(--color-main-text, #222) !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28) !important;
+}
+
+dialog > header,
+dialog > footer {
+	border-color: var(--color-border, #d8d8d8) !important;
+	background: var(--color-main-background, #fff) !important;
+}
+
+dialog > header .close {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	float: right !important;
+	width: 32px !important;
+	height: 32px !important;
+	border: 0 !important;
+	border-radius: 50% !important;
+	background: transparent !important;
+	color: var(--color-main-text, #222) !important;
+	font-size: 0 !important;
+	text-decoration: none !important;
+}
+
+.nextsnapmail-integrated-admin-body .alert > .close {
+	font-size: 0 !important;
+}
+
+.nextsnapmail-integrated-admin-body .nextsnapmail-material-icon {
+	display: inline-block;
+	flex: 0 0 auto !important;
+	width: 20px !important;
+	height: 20px !important;
+	background-color: currentColor !important;
+	-webkit-mask-position: center !important;
+	-webkit-mask-repeat: no-repeat !important;
+	-webkit-mask-size: contain !important;
+	mask-position: center !important;
+	mask-repeat: no-repeat !important;
+	mask-size: contain !important;
+	vertical-align: middle !important;
+}
+
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-button,
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-action {
+	display: inline-flex;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 0.4rem !important;
+}
+
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-action {
+	width: 32px !important;
+	height: 32px !important;
+	border-radius: 50% !important;
+	cursor: pointer !important;
+}
+
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-action:hover,
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-action:focus-visible {
+	background: var(--color-background-hover, #e9e9e9) !important;
+}
+
+.nextsnapmail-integrated-admin-body .nextsnapmail-status-success { color: var(--color-success, #2d7d46) !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-status-warning { color: var(--color-warning, #b36b00) !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-status-error { color: var(--color-error, #c00) !important; }
+
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-pencil { -webkit-mask-image: url('../img/material/pencil.svg') !important; mask-image: url('../img/material/pencil.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-plus { -webkit-mask-image: url('../img/material/plus.svg') !important; mask-image: url('../img/material/plus.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-close { -webkit-mask-image: url('../img/material/close.svg') !important; mask-image: url('../img/material/close.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-content-save { -webkit-mask-image: url('../img/material/content-save.svg') !important; mask-image: url('../img/material/content-save.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-information { -webkit-mask-image: url('../img/material/information.svg') !important; mask-image: url('../img/material/information.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-account-multiple { -webkit-mask-image: url('../img/material/account-multiple.svg') !important; mask-image: url('../img/material/account-multiple.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-checkbox-marked { -webkit-mask-image: url('../img/material/checkbox-marked.svg') !important; mask-image: url('../img/material/checkbox-marked.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-checkbox-blank { -webkit-mask-image: url('../img/material/checkbox-blank-outline.svg') !important; mask-image: url('../img/material/checkbox-blank-outline.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-account { -webkit-mask-image: url('../img/material/account.svg') !important; mask-image: url('../img/material/account.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-key { -webkit-mask-image: url('../img/material/key.svg') !important; mask-image: url('../img/material/key.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-timer { -webkit-mask-image: url('../img/material/timer.svg') !important; mask-image: url('../img/material/timer.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-power { -webkit-mask-image: url('../img/material/power.svg') !important; mask-image: url('../img/material/power.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-menu { -webkit-mask-image: url('../img/material/menu.svg') !important; mask-image: url('../img/material/menu.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-alert { -webkit-mask-image: url('../img/material/alert.svg') !important; mask-image: url('../img/material/alert.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-check-circle { -webkit-mask-image: url('../img/material/check-circle.svg') !important; mask-image: url('../img/material/check-circle.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-close-circle { -webkit-mask-image: url('../img/material/close-circle.svg') !important; mask-image: url('../img/material/close-circle.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-check { -webkit-mask-image: url('../img/material/check.svg') !important; mask-image: url('../img/material/check.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-cog { -webkit-mask-image: url('../img/material/cog.svg') !important; mask-image: url('../img/material/cog.svg') !important; }
+.nextsnapmail-integrated-admin-body .nextsnapmail-icon-delete { -webkit-mask-image: url('../img/material/delete.svg') !important; mask-image: url('../img/material/delete.svg') !important; }
+
+dialog > header .close:hover {
+	background: var(--color-background-hover, #e5e5e5) !important;
+}
+
+#V-PopupsDomain {
+	max-width: 920px !important;
+}
+
+#V-PopupsDomain .tabs > input[type="radio"] {
+	display: none !important;
+}
+
+#V-PopupsDomain .tabs > label {
+	box-sizing: border-box !important;
+	min-height: 38px !important;
+	padding: 8px 12px !important;
+	border: 1px solid var(--color-border, #d8d8d8) !important;
+	border-radius: var(--border-radius-large, 10px) var(--border-radius-large, 10px) 0 0 !important;
+	background: var(--color-background-hover, #f5f5f5) !important;
+	font-weight: 600 !important;
+	opacity: 1 !important;
+}
+
+#V-PopupsDomain .tabs > [id^="tab"]:checked + label {
+	border-color: var(--color-primary-element, #00679e) !important;
+	background: var(--color-primary-element, #00679e) !important;
+	color: var(--color-primary-element-text, #fff) !important;
+}
+
+#V-PopupsDomain .tab-content {
+	padding: 18px !important;
+	border: 1px solid var(--color-border, #d8d8d8) !important;
+	border-radius: 0 0 var(--border-radius-large, 10px) var(--border-radius-large, 10px) !important;
+}
+
+#V-PopupsDomain .tab-content .row {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	gap: 0.8rem 1rem !important;
+	margin-left: 0 !important;
+}
+
+#V-PopupsDomain .tab-content .row > [class*="span"] {
+	width: auto !important;
+	margin-left: 0 !important;
+}
+
+#V-AdminPane .e-checkbox {
+	display: flex !important;
+	align-items: center !important;
+	gap: 0.45rem !important;
+	min-height: 30px !important;
+}
+
+#V-AdminPane .e-checkbox > span {
+	margin: 0 !important;
+}
+
+#V-Settings-Packages table,
+#V-Settings-Packages .alert,
+#V-Settings-Config table {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+#V-Settings-Packages table {
+	border-collapse: separate !important;
+	border-spacing: 0 6px !important;
+}
+
+#V-Settings-Packages tbody tr {
+	background: var(--color-background-hover, #f5f5f5) !important;
+}
+
+/* Use a Nextcloud-style state control instead of the purple glyph supplied by
+ * SnappyMail's icon font. The existing package-active class and click handler
+ * continue to perform the actual enable/disable operation. */
+#V-Settings-Packages .package-active {
+	box-sizing: border-box !important;
+	display: inline-flex;
+	align-items: center !important;
+	justify-content: center !important;
+	width: 22px !important;
+	height: 22px !important;
+	margin: 0 0.65rem 0 0 !important;
+	border: 2px solid var(--color-border-maxcontrast, #868686) !important;
+	border-radius: 6px !important;
+	background: var(--color-main-background, #fff) !important;
+	color: transparent !important;
+	font-family: var(--font-face, system-ui, sans-serif) !important;
+	font-size: 0 !important;
+	font-weight: 700 !important;
+	line-height: 1 !important;
+	text-decoration: none !important;
+	vertical-align: middle !important;
+}
+
+#V-Settings-Packages tr:not(.disabled) .package-active {
+	border-color: var(--color-primary-element, #00679e) !important;
+	background: var(--color-primary-element, #00679e) !important;
+	color: var(--color-primary-element-text, #fff) !important;
+}
+
+#V-Settings-Packages tr:not(.disabled) .package-active::after {
+	content: '' !important;
+	width: 16px !important;
+	height: 16px !important;
+	background: center / 16px 16px no-repeat url('../img/material/check.svg') !important;
+}
+
+#V-Settings-Packages .package-active:hover,
+#V-Settings-Packages .package-active:focus-visible {
+	box-shadow: 0 0 0 2px var(--color-primary-element-light, rgba(0, 103, 158, 0.25)) !important;
+}
+
+/* Package actions use locally bundled Material Design icons. Do not force the
+ * display property: Knockout uses display:none for actions that do not apply. */
+#V-Settings-Packages .nextsnapmail-package-action {
+	display: inline-flex;
+	align-items: center !important;
+	justify-content: center !important;
+	box-sizing: border-box !important;
+	width: 32px !important;
+	height: 32px !important;
+	margin: 0 0.15rem !important;
+	border-radius: 50% !important;
+	color: var(--color-main-text, #222) !important;
+	text-decoration: none !important;
+	vertical-align: middle !important;
+}
+
+#V-Settings-Packages .nextsnapmail-package-action:hover,
+#V-Settings-Packages .nextsnapmail-package-action:focus-visible {
+	background: var(--color-background-hover, #e9e9e9) !important;
+}
+
+#V-Settings-Packages .nextsnapmail-package-action-delete:hover,
+#V-Settings-Packages .nextsnapmail-package-action-delete:focus-visible {
+	color: var(--color-error, #c00) !important;
+}
+
+#V-Settings-Packages .nextsnapmail-material-icon {
+	display: inline-block !important;
+	width: 20px !important;
+	height: 20px !important;
+	background-color: currentColor !important;
+	-webkit-mask-position: center !important;
+	-webkit-mask-repeat: no-repeat !important;
+	-webkit-mask-size: contain !important;
+	mask-position: center !important;
+	mask-repeat: no-repeat !important;
+	mask-size: contain !important;
+}
+
+#V-Settings-Packages .nextsnapmail-icon-cog {
+	-webkit-mask-image: url('../img/material/cog.svg') !important;
+	mask-image: url('../img/material/cog.svg') !important;
+}
+
+#V-Settings-Packages .nextsnapmail-icon-download {
+	-webkit-mask-image: url('../img/material/download.svg') !important;
+	mask-image: url('../img/material/download.svg') !important;
+}
+
+#V-Settings-Packages .nextsnapmail-icon-delete {
+	-webkit-mask-image: url('../img/material/delete.svg') !important;
+	mask-image: url('../img/material/delete.svg') !important;
+}
+
+@media (max-width: 700px) {
+	#V-AdminPane .form-horizontal .control-group {
+		grid-template-columns: 1fr !important;
+	}
+
+	#V-PopupsDomain .tabs {
+		display: flex !important;
+		flex-direction: column !important;
+	}
+
+	#V-PopupsDomain .tabs > label,
+	#V-PopupsDomain .tab-content {
+		width: 100% !important;
+		border-radius: var(--border-radius-large, 10px) !important;
+	}
+}

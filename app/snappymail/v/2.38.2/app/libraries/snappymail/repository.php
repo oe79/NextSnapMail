@@ -234,6 +234,11 @@ abstract class Repository
 
 	public static function enablePackage(string $sName, bool $bEnable = true) : bool
 	{
+		$sName = \strtolower(\trim($sName));
+		if ('nextcloud' === $sName && !$bEnable) {
+			return false;
+		}
+
 		if (!\strlen($sName)) {
 			return false;
 		}
@@ -311,6 +316,9 @@ abstract class Repository
 	public static function deletePackage(string $sId) : bool
 	{
 		\RainLoop\Api::Actions()->IsAdminLoggined();
+		if ('nextcloud' === \strtolower(\trim($sId))) {
+			return false;
+		}
 		static::enablePackage($sId, false);
 		return static::deletePackageDir($sId);
 	}

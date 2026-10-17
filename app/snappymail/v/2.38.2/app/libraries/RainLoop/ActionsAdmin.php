@@ -371,7 +371,7 @@ class ActionsAdmin extends Actions
 	{
 		$user = (string) $this->GetActionParam('username', '');
 		$secret = (string) $this->GetActionParam('TOTP', '');
-		$issuer = \rawurlencode(API::Config()->Get('webmail', 'title', 'SnappyMail'));
+		$issuer = \rawurlencode(API::Config()->Get('webmail', 'title', 'NextSnapMail'));
 		$QR = \SnappyMail\QRCode::getMinimumQRCode(
 			"otpauth://totp/{$issuer}:{$user}?secret={$secret}&issuer={$issuer}",
 //			"otpauth://totp/{$user}?secret={$secret}",

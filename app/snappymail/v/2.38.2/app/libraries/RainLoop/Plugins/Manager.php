@@ -26,8 +26,17 @@ class Manager
 		$this->SetLogger($oActions->Logger());
 
 		$oConfig = $oActions->Config();
-		$this->bIsEnabled = (bool) $oConfig->Get('plugins', 'enable', false);
-		if ($this->bIsEnabled) {
+		$bOptionalPluginsEnabled = (bool) $oConfig->Get('plugins', 'enable', false);
+		$bNextcloudIntegrated = \class_exists('OC') && isset(\OC::$server);
+
+		// NextSnapMail's Nextcloud integration is a mandatory system module. It
+		// must keep working even when support for optional plugins is disabled.
+		$this->bIsEnabled = $bOptionalPluginsEnabled || $bNextcloudIntegrated;
+		if ($bNextcloudIntegrated) {
+			$this->loadPlugin('nextcloud');
+		}
+
+		if ($bOptionalPluginsEnabled) {
 			$sList = $oConfig->Get('plugins', 'enabled_list', '');
 			if (\strlen($sList)) {
 				$aList = \SnappyMail\Repository::getEnabledPackagesNames();

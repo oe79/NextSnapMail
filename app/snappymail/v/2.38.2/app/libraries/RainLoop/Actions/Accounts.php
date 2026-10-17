@@ -209,6 +209,7 @@ trait Accounts
 			'accountHash' => $oAccount->Hash(),
 			'mainEmail' => \RainLoop\Api::Actions()->getMainAccountFromToken()->Email(),
 			'contactsAllowed' => $this->AddressBookProvider($oAccount)->IsActive(),
+			'contactsSyncReadOnly' => $oAccount instanceof AdditionalAccount,
 			'HideUnsubscribed' => false,
 			'useThreads' => (bool) $oConfig->Get('defaults', 'mail_use_threads', false),
 			'threadAlgorithm' => '',

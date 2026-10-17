@@ -454,6 +454,8 @@
 		"SIMPLE": "Simple",
 		"ADVANCED": "Advanced",
 		"BUTTON_ADD_SCRIPT": "Add a Script",
+		"BUTTON_MIGRATE_LEGACY": "Migrate RainLoop filters now",
+		"LEGACY_SCRIPT_FOUND": "A legacy RainLoop filter script was detected. Its filters will be merged into nextsnapmail.user and rainloop.user will then be removed.",
 		"SUBNAME_MOVE_TO": "Move to \"%FOLDER%\"",
 		"SUBNAME_FORWARD_TO": "Forward to \"%EMAIL%\"",
 		"SUBNAME_REJECT": "Reject",
@@ -523,6 +525,7 @@
 		"LABEL_CONTACTS_SYNC_SERVER": "Server",
 		"LABEL_CONTACTS_SYNC_AB_URL": "Addressbook URL",
 		"LABEL_CONTACTS_SYNC_USER": "User",
+		"NOTICE_CONTACTS_SYNC_SHARED": "CardDAV synchronization is shared by all mail accounts. Switch to the main account to change these settings.",
 		"SYNC_READ": "Read only"
 	},
 	"SETTINGS_THEMES": {

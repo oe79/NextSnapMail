@@ -838,15 +838,18 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 				}
 				if ($bSave) {
 					$oActions = \RainLoop\Api::Actions();
-					$oActions->setContactsSyncData(
-						$oActions->getAccountFromToken(),
-						array(
-							'Mode' => $aResult['ContactsSync']['Mode'],
-							'User' => $aResult['ContactsSync']['User'],
-							'Password' => $aResult['ContactsSync']['Password'],
-							'Url' => $aResult['ContactsSync']['Url']
-						)
-					);
+					$oAccount = $oActions->getAccountFromToken();
+					if (!($oAccount instanceof \RainLoop\Model\AdditionalAccount)) {
+						$oActions->setContactsSyncData(
+							$oAccount,
+							array(
+								'Mode' => $aResult['ContactsSync']['Mode'],
+								'User' => $aResult['ContactsSync']['User'],
+								'Password' => $aResult['ContactsSync']['Password'],
+								'Url' => $aResult['ContactsSync']['Url']
+							)
+						);
+					}
 				}
 			}
 		}

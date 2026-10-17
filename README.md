@@ -34,6 +34,26 @@ continued maintenance.
 
 Newest changes first:
 
+- Updated MySQL PDO SSL options for PHP 8.5 while retaining compatibility with
+  older PHP versions, preventing recurring deprecation entries in the
+  Nextcloud log.
+- Fixed empty message bodies when an HTML-only email contains visible content
+  inside a leaked MJML `mj-raw` wrapper. The wrapper is removed while its
+  contents still pass through the regular HTML sanitizer.
+- Integrated the complete NextSnapMail administration directly into the
+  Nextcloud administration settings. Domains, Google OAuth, webmail settings,
+  extensions, Nextcloud integration, import and reset functions can now be
+  managed without a separate webmail administrator login.
+- Reworked the administration pages with dedicated navigation, Nextcloud-style
+  forms and icons, clearer domain actions and visible IMAP, SMTP and Sieve test
+  results.
+- The bundled Nextcloud integration is now treated as an internal system
+  component and is no longer presented as an optional extension.
+- Fixed Sieve script detection in the optimized JavaScript bundle so existing
+  server-side scripts and filters are also displayed outside debug mode.
+- Protected the shared CardDAV configuration from being overwritten while an
+  additional mail account is active. The settings remain visible but can only
+  be changed from the main account.
 - Added a dedicated multilingual out-of-office settings page with start and
   end dates, reply intervals and automatic Sieve capability checks.
 - Out-of-office responses can be configured separately for the main address
@@ -42,8 +62,10 @@ Newest changes first:
 - Out-of-office settings stored by another NextSnapMail instance on the same
   Sieve server are detected and preserved. Their addresses are shown and can
   be removed explicitly when they are no longer needed.
-- New managed Sieve filters use `nextsnapmail.user`; existing `rainloop.user`
-  filters are preserved and can be migrated safely.
+- New managed Sieve filters use `nextsnapmail.user`. Existing `rainloop.user`
+  and `nextsnapmail.user` scripts remain independently selectable and editable.
+  A separate migration button can explicitly merge the legacy filters into
+  `nextsnapmail.user` and remove `rainloop.user` after a successful transfer.
 - Added account-wide and subfolder search scopes to both the regular and
   Advanced Search while keeping the current folder as the default.
 - Clarified the unread-folder control in the folder sidebar by presenting it as
@@ -87,8 +109,11 @@ NextSnapMail can be configured in two places:
   login and, when supported by the configured mail server, personal
   out-of-office responses
 
-The embedded NextSnapMail webmail admin panel can be opened from the
-NextSnapMail administration settings in Nextcloud.
+The complete webmail administration is integrated into the dedicated
+NextSnapMail section of the Nextcloud administration settings. A separate
+NextSnapMail administrator login is not required. This includes mail domains,
+Google OAuth, general webmail settings, extensions, Nextcloud integration and
+the import and reset tools.
 
 If you previously used the original SnappyMail Nextcloud app, you can use the
 NextSnapMail admin settings to import existing SnappyMail accounts and app data.

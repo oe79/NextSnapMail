@@ -13,6 +13,16 @@ return [
 			'verb' => 'POST'
 		],
 		[
+			'name' => 'page#admin',
+			'url' => '/admin/',
+			'verb' => 'GET'
+		],
+		[
+			'name' => 'page#adminPost',
+			'url' => '/admin/',
+			'verb' => 'POST'
+		],
+		[
 			'name' => 'page#appGet',
 			'url' => '/run/',
 			'verb' => 'GET'

@@ -1380,7 +1380,17 @@ html.rl-started-trigger .LoginView {
   color: green !important;
 }
 #V-PopupsDomain .testing-error {
-  color: red !important;
+	color: red !important;
+}
+#V-PopupsDomain .domain-test-result {
+	margin: 0 15px 10px;
+	max-width: none;
+	font-weight: 600;
+}
+#V-PopupsDomain .domain-test-result.nextsnapmail-test-success {
+	background-color: #edf7ed;
+	border-color: #4f9153;
+	color: #256029;
 }
 #V-PopupsDomain .tab-content {
   grid-column-end: 5;

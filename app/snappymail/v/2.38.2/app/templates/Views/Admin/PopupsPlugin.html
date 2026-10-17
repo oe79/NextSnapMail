@@ -1,5 +1,5 @@
 <header>
-	<a href="#" class="close" data-bind="click: close">×</a>
+	<a href="#" class="close" data-bind="click: close"><span class="nextsnapmail-material-icon nextsnapmail-icon-close" aria-hidden="true"></span></a>
 	<h4>
 		<span data-i18n="POPUPS_PLUGIN/TITLE_PLUGIN"></span>
 		"<span data-bind="text: name"></span>"
@@ -14,7 +14,7 @@
 			<form class="form-horizontal plugin-form" action="#/" spellcheck="false" onsubmit="return false;">
 				<div class="alert alert-info" data-bind="visible: !hasConfiguration()" data-i18n="POPUPS_PLUGIN/DESC_NOTHING_TO_CONFIGURE"></div>
 				<div class="alert" data-bind="visible: '' !== saveError()">
-					<a href="#" class="close" data-bind="click: hideError">×</a>
+					<a href="#" class="close" data-bind="click: hideError"><span class="nextsnapmail-material-icon nextsnapmail-icon-close" aria-hidden="true"></span></a>
 					<span data-bind="text: saveError"></span>
 				</div>
 				<div data-bind="foreach: config, visible: hasConfiguration">
@@ -47,6 +47,6 @@
 	</div>
 </div>
 <footer>
-	<a class="btn buttonClose" data-bind="click: close" data-icon="✖" data-i18n="GLOBAL/CLOSE"></a>
-	<a class="btn" data-bind="command: saveCommand, visible: hasConfiguration" data-icon="✔" data-i18n="GLOBAL/SAVE"></a>
+	<a class="btn buttonClose nextsnapmail-icon-button" data-bind="click: close"><span class="nextsnapmail-material-icon nextsnapmail-icon-close" aria-hidden="true"></span><span data-i18n="GLOBAL/CLOSE"></span></a>
+	<a class="btn nextsnapmail-icon-button" data-bind="command: saveCommand, visible: hasConfiguration"><span class="nextsnapmail-material-icon nextsnapmail-icon-check" aria-hidden="true"></span><span data-i18n="GLOBAL/SAVE"></span></a>
 </footer>

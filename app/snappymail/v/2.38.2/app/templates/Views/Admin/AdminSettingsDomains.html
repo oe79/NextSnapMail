@@ -16,22 +16,23 @@
 			<td class="e-action">
 				<span class="domain-name" data-bind="text: name"></span>
 				<span class="domain-alias" data-bind="if: alias">(alias)</span>
+				<span class="domain-edit nextsnapmail-material-icon nextsnapmail-icon-pencil" aria-hidden="true"></span>
 			</td>
 			<td>
-				<a class="btn btn-small btn-danger button-confirm-delete" data-bind="css: {'delete-access': askDelete()}, click: function(oDomain) { $root.deleteDomain(oDomain); }"
+				<a class="btn btn-small btn-danger button-confirm-delete" data-bind="visible: askDelete, css: {'delete-access': askDelete()}, click: function(oDomain) { $root.deleteDomain(oDomain); }"
 					data-i18n="TAB_DOMAINS/DELETE_ARE_YOU_SURE"></a>
 			</td>
 			<td>
-				<span class="delete-domain fontastic" data-bind="visible: !askDelete(), click: function (oDomain) { $root.domainForDeletion(oDomain); }">🗑</span>
+				<span class="delete-domain nextsnapmail-icon-action" data-bind="visible: !askDelete(), click: function (oDomain) { $root.domainForDeletion(oDomain); }"><span class="nextsnapmail-material-icon nextsnapmail-icon-delete" aria-hidden="true"></span></span>
 			</td>
-			<td class="disabled-domain fontastic" data-bind="click: function (oDomain) { $root.disableDomain(oDomain); }, text: disabled() ? '☐' : '☑'"></td>
+			<td class="disabled-domain" data-bind="click: function (oDomain) { $root.disableDomain(oDomain); }"><span class="nextsnapmail-material-icon" data-bind="css: disabled() ? 'nextsnapmail-icon-checkbox-blank' : 'nextsnapmail-icon-checkbox-marked'" aria-hidden="true"></span></td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr><td colspan="4" style="text-align:right">
-			<a class="btn" data-bind="click: createDomain" data-icon="✚" data-i18n="TAB_DOMAINS/BUTTON_ADD_DOMAIN"></a>
+			<a class="btn nextsnapmail-icon-button" data-bind="click: createDomain"><span class="nextsnapmail-material-icon nextsnapmail-icon-plus" aria-hidden="true"></span><span data-i18n="TAB_DOMAINS/BUTTON_ADD_DOMAIN"></span></a>
 			&nbsp;&nbsp;
-			<a class="btn" data-bind="click: createDomainAlias" data-icon="✚" data-i18n="TAB_DOMAINS/BUTTON_ADD_ALIAS"></a>
+			<a class="btn nextsnapmail-icon-button" data-bind="click: createDomainAlias"><span class="nextsnapmail-material-icon nextsnapmail-icon-plus" aria-hidden="true"></span><span data-i18n="TAB_DOMAINS/BUTTON_ADD_ALIAS"></span></a>
 		</td></tr>
 	</tfoot>
 </table>

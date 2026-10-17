@@ -114,6 +114,11 @@ class Application extends App implements IBootstrap
 				SnappyMailHelper::loadApp();
 //			\RainLoop\Api::Actions()->Logout(true);
 				\RainLoop\Api::Actions()->DoLogout();
+				// The integrated administration creates a short-lived SnappyMail
+				// administrator session for the current Nextcloud administrator.
+				// Remove it together with the webmail session so it can never
+				// survive a Nextcloud logout on a shared browser.
+				(new \RainLoop\ActionsAdmin())->DoAdminLogout();
 			} catch (\Throwable $e) {
 				$logger->warning('Could not clear NextSnapMail session during Nextcloud logout: ' . $e->getMessage(), [
 					'app' => self::APP_ID
