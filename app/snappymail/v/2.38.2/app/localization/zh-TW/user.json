@@ -72,6 +72,11 @@
 		"SINCE_3_MONTHS": "三個月以內",
 		"SINCE_6_MONTHS": "半年以內",
 		"SINCE_YEAR": "一年以內",
+		"SCOPE": "搜尋範圍",
+		"SCOPE_CURRENT": "目前資料夾",
+		"SCOPE_ALL": "所有資料夾",
+		"SCOPE_SUBTREE": "目前資料夾及其子資料夾",
+		"SCOPE_SUBTREE_SHORT": "目前資料夾及子資料夾",
 		"SUBFOLDERS": "子資料夾",
 		"SUBFOLDERS_NONE": "無",
 		"SUBFOLDERS_SUBTREE": "全部",
@@ -86,7 +91,8 @@
 		"SENT_NAME": "寄件備份",
 		"DRAFTS_NAME": "草稿",
 		"TRASH_NAME": "垃圾桶",
-		"ARCHIVE_NAME": "封存"
+		"ARCHIVE_NAME": "封存",
+		"SHOW_ONLY_UNREAD_FOLDERS": "只顯示含有未讀郵件的資料夾"
 	},
 	"IMAP": {
 		"ACL_RIGHTS": "Rights",

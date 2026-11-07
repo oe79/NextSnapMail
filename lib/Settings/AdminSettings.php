@@ -16,7 +16,10 @@ class AdminSettings implements ISettings
 
 	public function getForm()
 	{
-		\OCA\NextSnapMail\Util\SnappyMailHelper::loadApp();
+		// Establish the SnappyMail-compatible administrator cookie in the
+		// top-level Nextcloud response. Safari on iPadOS may otherwise delay or
+		// reject a cookie first created by the embedded administration frame.
+		\OCA\NextSnapMail\Util\SnappyMailHelper::ensureAdminSession();
 
 		$keys = [
 			'nextsnapmail-autologin',
@@ -30,6 +33,8 @@ class AdminSettings implements ISettings
 		}
 		$parameters['nextsnapmail-integrated-admin-url'] =
 			\OC::$server->get(\OCP\IURLGenerator::class)->linkToRoute('nextsnapmail.page.admin');
+		$parameters['nextsnapmail-legacy-admin-url'] =
+			\OC::$server->get(\OCP\IURLGenerator::class)->linkToRoute('nextsnapmail.page.index') . '?admin';
 
 		$oConfig = \RainLoop\Api::Config();
 		$brandingChanged = false;
@@ -37,7 +42,7 @@ class AdminSettings implements ISettings
 			$oConfig->Set('webmail', 'title', 'NextSnapMail Webmail');
 			$brandingChanged = true;
 		}
-		if ('SnappyMail' === $oConfig->Get('webmail', 'loading_description', '')) {
+		if (\in_array($oConfig->Get('webmail', 'loading_description', ''), ['SnappyMail', 'NextSnapMail - based on SnappyMail'], true)) {
 			$oConfig->Set('webmail', 'loading_description', 'NextSnapMail');
 			$brandingChanged = true;
 		}

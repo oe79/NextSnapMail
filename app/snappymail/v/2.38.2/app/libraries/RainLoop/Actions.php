@@ -564,6 +564,8 @@ class Actions
 			'Plugins' => array(),
 			'System' => array(
 				'version' => APP_VERSION,
+				'nextsnapmailVersion' => defined('NEXTSNAPMAIL_VERSION') ? NEXTSNAPMAIL_VERSION : '',
+				'snappymailBaseVersion' => defined('SNAPPYMAIL_BASE_VERSION') ? SNAPPYMAIL_BASE_VERSION : APP_VERSION,
 				'token' => Utils::GetCsrfToken(),
 				'languages' => \SnappyMail\L10n::getLanguages(false),
 				'webPath' => \RainLoop\Utils::WebPath(),

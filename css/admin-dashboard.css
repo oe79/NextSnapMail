@@ -66,6 +66,19 @@
 	margin: 0.75rem 0 1.5rem;
 }
 
+.nextsnapmail-admin-frame-fallback {
+	box-sizing: border-box;
+	margin-top: 0.75rem;
+	padding: 1rem;
+	border: 1px solid var(--color-warning, #b36b00);
+	border-radius: var(--border-radius-large, 10px);
+	background: var(--color-background-hover, #f5f5f5);
+}
+
+.nextsnapmail-admin-frame-fallback p {
+	margin: 0 0 0.75rem;
+}
+
 #nextsnapmail-admin-frame {
 	display: block;
 	width: 100%;

@@ -3,26 +3,26 @@
 	<a class="btn buttonCompose onCheckedHide" data-bind="click: composeClick, css: {'btn-warning': composeInEdit, 'btn-success': !composeInEdit()}" data-i18n="[title]FOLDER_LIST/BUTTON_NEW_MESSAGE">
 		<i class="icon-paper-plane"></i>
 	</a>
-	<a class="btn onCheckedHide" data-bind="click: reload" data-i18n="[title]MESSAGE_LIST/BUTTON_RELOAD">
-		<i class="icon-spinner not-animated"></i>
+	<a class="btn onCheckedHide nsm-toolbar-action" data-bind="click: reload" data-i18n="[title]MESSAGE_LIST/BUTTON_RELOAD">
+		<i class="nsm-toolbar-icon nsm-icon-refresh" aria-hidden="true"></i>
 	</a>
-	<a href="#" tabindex="-1" class="btn onCheckedShow" data-bind="command: moveCommand" data-i18n="[title]GLOBAL/MOVE_TO">
-		<i class="icon-copy visible-on-ctrl-btn"></i>
-		<i class="fontastic hidden-on-ctrl-btn">📁</i>
+	<a href="#" tabindex="-1" class="btn onCheckedShow nsm-toolbar-action" data-bind="command: moveCommand" data-i18n="[title]GLOBAL/MOVE_TO">
+		<i class="icon-copy visible-on-ctrl-btn" aria-hidden="true"></i>
+		<i class="nsm-toolbar-icon nsm-icon-move hidden-on-ctrl-btn" aria-hidden="true"></i>
 	</a>
 	<div class="btn-group onCheckedShow">
-		<a class="btn fontastic" data-bind="visible: archiveAllowed, command: archiveCommand" data-i18n="[title]GLOBAL/TO_ARCHIVE">🗄</a>
-		<a class="btn fontastic" data-bind="visible: canMarkAsSpam, command: spamCommand" data-i18n="[title]GLOBAL/TO_SPAM">⚠</a>
+		<a class="btn nsm-toolbar-action" data-bind="visible: archiveAllowed, command: archiveCommand" data-i18n="[title]GLOBAL/TO_ARCHIVE"><i class="nsm-toolbar-icon nsm-icon-archive" aria-hidden="true"></i></a>
+		<a class="btn nsm-toolbar-action" data-bind="visible: canMarkAsSpam, command: spamCommand" data-i18n="[title]GLOBAL/TO_SPAM"><i class="nsm-toolbar-icon nsm-icon-spam" aria-hidden="true"></i></a>
 		<a class="btn" data-bind="visible: isSpamFolder, command: notSpamCommand" data-i18n="[title]GLOBAL/NOT_SPAM">
 			<i class="icon-check-mark-circle-two"></i>
 		</a>
-		<a class="btn fontastic" data-bind="command: deleteCommand" data-i18n="[title]GLOBAL/DELETE">🗑</a>
+		<a class="btn nsm-toolbar-action" data-bind="command: deleteCommand" data-i18n="[title]GLOBAL/DELETE"><i class="nsm-toolbar-icon nsm-icon-delete" aria-hidden="true"></i></a>
 <!--
 		<a class="btn fontastic" data-bind="command: undeleteCommand, hidden: hideDeleted" data-i18n="[title]GLOBAL/UNDELETE" style="transform:rotate(-180deg)">🗑</a>
 -->
 	</div>
 	<div class="btn-group dropdown" data-bind="registerBootstrapDropdown: true">
-		<a id="more-list-dropdown-id" class="btn dropdown-toggle fontastic" href="#" tabindex="-1" data-i18n="[title]GLOBAL/MORE">☰</a>
+		<a id="more-list-dropdown-id" class="btn dropdown-toggle nsm-toolbar-action" href="#" tabindex="-1" data-i18n="[title]GLOBAL/MORE"><i class="nsm-toolbar-icon nsm-icon-more" aria-hidden="true"></i></a>
 		<menu class="dropdown-menu" role="menu" aria-labelledby="more-list-dropdown-id">
 			<li role="presentation" data-bind="click: listUnsetSeen, css: {'disabled': !messageList.hasCheckedOrSelected()}">
 				<a href="#" tabindex="-1" data-icon="" data-i18n="MESSAGE_LIST/MENU_UNSET_SEEN"></a>
@@ -81,7 +81,7 @@
 		<div id="no-sort-list" class="btn fontastic" data-i18n="[title]MESSAGE_LIST/NO_SORT">✖⬇</div>
 	</div>
 	<div class="btn-group dropdown onCheckedHide" data-bind="visible: sortSupported(), registerBootstrapDropdown: true">
-		<a id="sort-list-dropdown-id" class="btn dropdown-toggle fontastic" href="#" tabindex="-1" data-i18n="[title]MESSAGE_LIST/SORT" data-bind="text: sortText">⬇</a>
+		<a id="sort-list-dropdown-id" class="btn dropdown-toggle nsm-toolbar-action" href="#" tabindex="-1" data-i18n="[title]MESSAGE_LIST/SORT"><i class="nsm-toolbar-icon nsm-icon-sort-date" aria-hidden="true"></i><span class="nsm-visually-hidden" data-bind="text: sortText"></span></a>
 		<menu class="dropdown-menu" role="menu" aria-labelledby="sort-list-dropdown-id">
 			<li role="presentation" data-sort="" data-bind="click: changeSort">
 				<a href="#" tabindex="-1" data-icon="📅⬇" data-i18n="MESSAGE_LIST/SORT_DATE_DESC"></a>

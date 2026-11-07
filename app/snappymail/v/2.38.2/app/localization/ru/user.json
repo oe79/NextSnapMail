@@ -72,6 +72,11 @@
 		"SINCE_3_MONTHS": "За 3 месяца",
 		"SINCE_6_MONTHS": "За полгода",
 		"SINCE_YEAR": "За год",
+		"SCOPE": "Искать в",
+		"SCOPE_CURRENT": "Текущая папка",
+		"SCOPE_ALL": "Все папки",
+		"SCOPE_SUBTREE": "Текущая папка, включая подпапки",
+		"SCOPE_SUBTREE_SHORT": "Текущая папка и подпапки",
 		"SUBFOLDERS": "Подпапки",
 		"SUBFOLDERS_NONE": "Ничего",
 		"SUBFOLDERS_SUBTREE": "Все",
@@ -86,7 +91,8 @@
 		"SENT_NAME": "Отправленные",
 		"DRAFTS_NAME": "Черновики",
 		"TRASH_NAME": "Корзина",
-		"ARCHIVE_NAME": "Архив"
+		"ARCHIVE_NAME": "Архив",
+		"SHOW_ONLY_UNREAD_FOLDERS": "Показывать только папки с непрочитанными сообщениями"
 	},
 	"IMAP": {
 		"ACL_RIGHTS": "Rights",

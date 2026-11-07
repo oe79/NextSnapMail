@@ -1,6 +1,6 @@
 # NextSnapMail
 
-NextSnapMail is a SnappyMail fork focused on integration with Nextcloud.
+NextSnapMail is a Nextcloud-focused webmail application based on SnappyMail.
 
 It provides a lightweight webmail interface inside Nextcloud, using the
 embedded SnappyMail application for IMAP/SMTP mail access.
@@ -8,6 +8,17 @@ embedded SnappyMail application for IMAP/SMTP mail access.
 This project is now maintained as a dedicated Nextcloud app. The repository root
 is the installable app directory that belongs in a Nextcloud `apps/` folder as
 `nextsnapmail`.
+
+## Requirements
+
+- Nextcloud 32 through 35
+- PHP 8.1 or newer, within the PHP versions supported by the installed
+  Nextcloud release
+
+Older Nextcloud releases are not declared compatible because they are not part
+of the maintained compatibility range. Compatibility reports for supported
+versions are welcome, especially where a particular setup has not yet been
+reproduced by the maintainer.
 
 ## Looking for a standalone webmail client?
 
@@ -21,19 +32,34 @@ Tachyon is an independent project and is not affiliated with NextSnapMail.
 
 ## About this project
 
-I maintain NextSnapMail primarily for my own private use, because I wanted to
-continue using SnappyMail inside Nextcloud after upstream development slowed
-down.
+I originally created NextSnapMail primarily for my own private use so I could
+continue developing the Nextcloud integration according to my own needs.
+NextSnapMail remains an independent, Nextcloud-focused project. Compatible bug
+fixes and security improvements from SnappyMail may be adopted where useful,
+but returning existing NextSnapMail installations to the upstream app would be
+difficult because the projects now differ in their integration, data migration
+and feature sets.
 
 Everyone is welcome to use it, but please do so at your own risk. I am happy to
 receive bug reports, hints, and practical feedback, and I will try to help where
 I can. However, there is no guarantee of support, fixes, compatibility, or
 continued maintenance.
 
-## Current development status
+## Current release highlights (0.1.15)
 
 Newest changes first:
 
+- Added consistent, scalable and semantically colored SVG icons to the main
+  message toolbar, replacing platform-dependent emoji while remaining clearly
+  visible in light and dark themes.
+- Improved the integrated administration session and added a protected
+  full-page fallback for Safari and iPadOS if the embedded administration view
+  remains empty.
+- Added Polish, Russian, Simplified Chinese and Traditional Chinese
+  translations for the search scopes, unread-folder filter and out-of-office
+  interface.
+- Newly connected Gmail and Google Workspace additional accounts now initially
+  use the complete email address as their display name.
 - Updated MySQL PDO SSL options for PHP 8.5 while retaining compatibility with
   older PHP versions, preventing recurring deprecation entries in the
   Nextcloud log.

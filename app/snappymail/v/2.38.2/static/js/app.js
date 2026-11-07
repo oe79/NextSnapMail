@@ -15680,7 +15680,7 @@ body > * {
 		}
 
 		testSystemNotification() {
-			NotificationUserStore.display('SnappyMail', 'Test notification');
+			NotificationUserStore.display('NextSnapMail', 'Test notification');
 		}
 
 		selectLanguage() {
@@ -15692,7 +15692,7 @@ body > * {
 			navigator.registerProtocolHandler(
 				'mailto',
 				`${location.protocol}//${location.host}${location.pathname}?mailto&to=%s`,
-				(SettingsGet('title') || 'SnappyMail')
+				(SettingsGet('title') || 'NextSnapMail')
 			);
 			alert(i18n('GLOBAL/DONE'));
 			this.mailto(0);
@@ -15848,7 +15848,7 @@ body > * {
 			});
 
 			const sieveScriptUrl = SettingsGet('StaticLibsJs').replace('/libs.', '/sieve.'),
-				sieveScriptVersion = 'nextsnapmail-0.1.14-independent-scripts';
+				sieveScriptVersion = 'nextsnapmail-0.1.15-independent-scripts';
 			rl.loadScript(sieveScriptUrl + (sieveScriptUrl.includes('?') ? '&' : '?') + 'v=' + sieveScriptVersion).then(() => {
 				const Sieve = window.Sieve;
 				Sieve.folderList = FolderUserStore.folderList;

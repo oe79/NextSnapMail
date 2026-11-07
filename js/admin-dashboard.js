@@ -14,6 +14,7 @@
 		iframe.dataset.nextsnapmailLayoutReady = '1';
 
 		const workspace = document.querySelector('[data-nextsnapmail-admin-workspace]');
+		const fallback = document.querySelector('[data-nextsnapmail-admin-fallback]');
 		const saveArea = document.querySelector('[data-nextsnapmail-save-area]');
 		const pageButtons = [...document.querySelectorAll('[data-nextsnapmail-page]')];
 		const pagePanels = [...document.querySelectorAll('[data-nextsnapmail-panel]')];
@@ -31,6 +32,7 @@
 		};
 		const embeddedPages = new Set(Object.keys(adminRoutes));
 		const savePages = new Set(['domains', 'integration']);
+		let iframeCheckTimer = null;
 
 		const setAdminRoute = route => {
 			const nextHash = '#/settings/' + route;
@@ -101,8 +103,42 @@
 
 				const activePage = pageButtons.find(button => button.classList.contains('active'))?.dataset.nextsnapmailPage;
 				setAdminRoute(adminRoutes[activePage] || 'domains');
+
+				if (iframeCheckTimer) {
+					window.clearTimeout(iframeCheckTimer);
+				}
+				let attempts = 0;
+				const checkAdminPane = () => {
+					try {
+						const adminPane = iframe.contentDocument?.getElementById('V-AdminPane');
+						if (adminPane) {
+							if (fallback) {
+								fallback.hidden = true;
+							}
+							return;
+						}
+					} catch (error) {
+						if (fallback) {
+							fallback.hidden = false;
+						}
+						return;
+					}
+
+					attempts += 1;
+					if (attempts >= 15) {
+						if (fallback) {
+							fallback.hidden = false;
+						}
+						return;
+					}
+					iframeCheckTimer = window.setTimeout(checkAdminPane, 1000);
+				};
+				checkAdminPane();
 			} catch (error) {
 				console.warn('Could not prepare integrated NextSnapMail administration.', error);
+				if (fallback) {
+					fallback.hidden = false;
+				}
 			}
 		};
 

@@ -171,6 +171,8 @@
     "About" : "Über",
     "Manage extensions from the configured repository or install a trusted package manually." : "Verwalten Sie Erweiterungen aus dem eingerichteten Repository oder installieren Sie ein vertrauenswürdiges Paket manuell.",
     "Import existing SnappyMail data or reset this NextSnapMail installation." : "Importieren Sie bestehende SnappyMail-Daten oder setzen Sie diese NextSnapMail-Installation zurück.",
-    "Remove all NextSnapMail account settings and recreate the application data folder." : "Entfernt alle NextSnapMail-Kontoeinstellungen und erstellt den Anwendungsdatenordner neu."
+    "Remove all NextSnapMail account settings and recreate the application data folder." : "Entfernt alle NextSnapMail-Kontoeinstellungen und erstellt den Anwendungsdatenordner neu.",
+    "The embedded administration could not be displayed. You can open the complete administration view instead." : "Der eingebettete Administrationsbereich konnte nicht angezeigt werden. Öffnen Sie stattdessen die vollständige Administrationsansicht.",
+    "Open complete administration" : "Vollständige Administration öffnen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -72,6 +72,11 @@
 		"SINCE_3_MONTHS": "do 3 miesięcy",
 		"SINCE_6_MONTHS": "do 6 miesięcy",
 		"SINCE_YEAR": "do roku",
+		"SCOPE": "Szukaj w",
+		"SCOPE_CURRENT": "Bieżący folder",
+		"SCOPE_ALL": "Wszystkie foldery",
+		"SCOPE_SUBTREE": "Bieżący folder wraz z podfolderami",
+		"SCOPE_SUBTREE_SHORT": "Bieżący folder i podfoldery",
 		"SUBFOLDERS": "Podfoldery",
 		"SUBFOLDERS_NONE": "Brak",
 		"SUBFOLDERS_SUBTREE": "Wszystkie",
@@ -86,7 +91,8 @@
 		"SENT_NAME": "Wysłane",
 		"DRAFTS_NAME": "Szkice",
 		"TRASH_NAME": "Kosz",
-		"ARCHIVE_NAME": "Archiwum"
+		"ARCHIVE_NAME": "Archiwum",
+		"SHOW_ONLY_UNREAD_FOLDERS": "Pokaż tylko foldery z nieprzeczytanymi wiadomościami"
 	},
 	"IMAP": {
 		"ACL_RIGHTS": "Uprawnienia",

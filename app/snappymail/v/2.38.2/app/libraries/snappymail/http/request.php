@@ -47,7 +47,7 @@ abstract class Request
 
 	function __construct()
 	{
-		$this->user_agent = 'SnappyMail/' . APP_VERSION;
+		$this->user_agent = 'NextSnapMail/' . (defined('NEXTSNAPMAIL_VERSION') ? NEXTSNAPMAIL_VERSION : APP_VERSION);
 	}
 
 	public function setAuth(int $type, string $user,

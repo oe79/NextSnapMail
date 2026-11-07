@@ -84,30 +84,7 @@ class PageController extends Controller
 
 	private function ensureNextcloudAdminSession(): void
 	{
-		$user = \OC::$server->get(\OCP\IUserSession::class)->getUser();
-		if (!$user || !\OC_User::isAdminUser($user->getUID())) {
-			throw new \RuntimeException('NextSnapMail administration requires a Nextcloud administrator session.');
-		}
-
-		SnappyMailHelper::loadApp();
-		$config = \RainLoop\Api::Config();
-		if (!$config->Get('security', 'allow_admin_panel', true)) {
-			throw new \RuntimeException('NextSnapMail administration is disabled.');
-		}
-
-		$actions = \RainLoop\Api::Actions();
-		if (!$actions->IsAdminLoggined(false)) {
-			$random = \MailSo\Base\Utils::Sha1Rand();
-			if (!$actions->Cacher(null, true)->Set(\RainLoop\KeyPathHelper::SessionAdminKey($random), \time())) {
-				throw new \RuntimeException('Could not create the NextSnapMail administrator session.');
-			}
-
-			$token = \RainLoop\Utils::EncodeKeyValuesQ(['token', $random]);
-			if (!$token) {
-				throw new \RuntimeException('Could not encode the NextSnapMail administrator session.');
-			}
-			\SnappyMail\Cookies::set('nsmadmin', $token);
-		}
+		SnappyMailHelper::ensureAdminSession();
 	}
 
 	private function handleIntegratedAdminRequest()
@@ -170,9 +147,9 @@ class PageController extends Controller
 
 		$csp = new ContentSecurityPolicy();
 		$sNonce = $csp->getSnappyMailNonce();
-		$sLoadingDescription = $oConfig->Get('webmail', 'loading_description', 'NextSnapMail - based on SnappyMail');
-		if ('SnappyMail' === $sLoadingDescription) {
-			$sLoadingDescription = 'NextSnapMail - based on SnappyMail';
+		$sLoadingDescription = $oConfig->Get('webmail', 'loading_description', 'NextSnapMail');
+		if (\in_array($sLoadingDescription, ['SnappyMail', 'NextSnapMail - based on SnappyMail'], true)) {
+			$sLoadingDescription = 'NextSnapMail';
 		}
 
 		$params = [

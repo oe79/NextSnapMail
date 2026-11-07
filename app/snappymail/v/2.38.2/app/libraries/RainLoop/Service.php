@@ -105,7 +105,7 @@ abstract class Service
 		if ($bAdmin && !$oConfig->Get('security', 'allow_admin_panel', true)) {
 			\MailSo\Base\Http::StatusHeader(403);
 			echo $oServiceActions->ErrorTemplates('Access Denied.',
-				'Access to the SnappyMail Admin Panel is not allowed!');
+				'Access to the NextSnapMail Admin Panel is not allowed!');
 
 			return false;
 		}
@@ -153,7 +153,7 @@ abstract class Service
 			if (!\is_dir(APP_DATA_FOLDER_PATH) || !\is_writable(APP_DATA_FOLDER_PATH)) {
 				echo $oServiceActions->ErrorTemplates(
 					'Permission denied!',
-					'SnappyMail can not access the data folder "'.APP_DATA_FOLDER_PATH.'"'
+					'NextSnapMail can not access the data folder "'.APP_DATA_FOLDER_PATH.'"'
 				);
 				return false;
 			}
@@ -163,6 +163,11 @@ abstract class Service
 			$bAppDebug = $oConfig->Get('debug', 'enable', false);
 			$sAppJsMin = $bAppDebug || $oConfig->Get('debug', 'javascript', false) ? '' : '.min';
 			$sAppCssMin = $bAppDebug || $oConfig->Get('debug', 'css', false) ? '' : '.min';
+			$sMainCssFile = 'css/' . ($bAdmin ? 'admin' : 'app') . $sAppCssMin . '.css';
+			$sMainCssPath = APP_VERSION_ROOT_PATH . 'static/' . $sMainCssFile;
+			$sMainCssVersion = \is_file($sMainCssPath)
+				? \substr((string) \hash_file('sha256', $sMainCssPath), 0, 16)
+				: APP_VERSION;
 
 			$sFaviconUrl = (string) $oConfig->Get('webmail', 'favicon_url', '');
 
@@ -179,7 +184,8 @@ abstract class Service
 				'{{BaseAppFaviconTouchLinkTag}}' => $sAppleTouchLink ? '<link type="image/png" rel="apple-touch-icon" href="'.$sAppleTouchLink.'">' : '',
 				'{{BaseAppManifestLink}}' => Utils::WebStaticPath('manifest.json'),
 				'{{BaseFavIconSvg}}' => $sFaviconUrl ? '' : Utils::WebStaticPath('favicon.svg'),
-				'{{LoadingDescriptionEsc}}' => \htmlspecialchars($oConfig->Get('webmail', 'loading_description', 'SnappyMail'), ENT_QUOTES|ENT_IGNORE, 'UTF-8'),
+				'{{BaseAppMainCssLink}}' => Utils::WebStaticPath($sMainCssFile) . '?v=' . $sMainCssVersion,
+				'{{LoadingDescriptionEsc}}' => \htmlspecialchars($oConfig->Get('webmail', 'loading_description', 'NextSnapMail'), ENT_QUOTES|ENT_IGNORE, 'UTF-8'),
 				'{{BaseAppAdmin}}' => $bAdmin ? 1 : 0
 			);
 
@@ -191,7 +197,8 @@ abstract class Service
 					$sAppJsMin,
 					$sAppCssMin,
 					$aTemplateParameters,
-					APP_VERSION
+					APP_VERSION,
+					defined('NEXTSNAPMAIL_VERSION') ? NEXTSNAPMAIL_VERSION : ''
 				))
 			);
 
@@ -209,7 +216,6 @@ abstract class Service
 			} else {
 				$aTemplateParameters['{{BaseAppBootCss}}'] = \file_get_contents(APP_VERSION_ROOT_PATH.'static/css/boot'.$sAppCssMin.'.css');
 				$aTemplateParameters['{{BaseAppBootScript}}'] = \file_get_contents(APP_VERSION_ROOT_PATH.'static/js'.($sAppJsMin ? '/min' : '').'/boot'.$sAppJsMin.'.js');
-				$aTemplateParameters['{{BaseAppMainCssLink}}'] = Utils::WebStaticPath('css/'.($bAdmin ? 'admin' : 'app').$sAppCssMin.'.css');
 				$aTemplateParameters['{{BaseAppThemeCss}}'] = \preg_replace('/\\s*([:;{},]+)\\s*/s', '$1', $oActions->compileCss($sThemeName, $bAdmin));
 				$aTemplateParameters['{{BaseLanguage}}'] = $oActions->compileLanguage($sLanguage, $bAdmin);
 				$aTemplateParameters['{{BaseTemplates}}'] = Utils::ClearHtmlOutput($oServiceActions->compileTemplates($bAdmin));

@@ -430,7 +430,10 @@ class NextcloudPlugin extends \RainLoop\Plugins\AbstractPlugin
 
 		$accounts = $oActions->GetAccounts($oMainAccount);
 		$accounts[$oAdditionalAccount->Email()] = $oAdditionalAccount->asTokenArray($oMainAccount);
-		$accounts[$oAdditionalAccount->Email()]['name'] = 'Gmail';
+		// Use the actual address as the initial label so multiple Google
+		// accounts can be distinguished immediately. Users may still replace
+		// this label in the account settings.
+		$accounts[$oAdditionalAccount->Email()]['name'] = $email;
 		$accounts[$oAdditionalAccount->Email()]['nextsnapmail-gmail-oauth'] = true;
 		$oActions->SetAccounts($oMainAccount, $accounts);
 	}
