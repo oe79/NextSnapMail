@@ -226,7 +226,7 @@ Warning: only enable when server does not do this, else double compression error
 			),
 
 			'security' => array(
-				'custom_server_signature' => array('SnappyMail'),
+				'custom_server_signature' => array('NextSnapMail'),
 				'x_xss_protection_header' => array('1; mode=block'),
 
 				'gnupg'                   => array(true),

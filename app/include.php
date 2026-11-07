@@ -48,3 +48,20 @@ if (class_exists('OC')) {
  * Also update extensions on upgrade
  */
 define('SNAPPYMAIL_UPDATE_PLUGINS', 0);
+
+/**
+ * Keep the NextSnapMail release separate from the embedded upstream base.
+ * APP_VERSION remains the technical SnappyMail directory/API version for
+ * compatibility with existing assets, plugins and stored data.
+ */
+if (!defined('SNAPPYMAIL_BASE_VERSION')) {
+	define('SNAPPYMAIL_BASE_VERSION', defined('APP_VERSION') ? APP_VERSION : '2.38.2');
+}
+if (!defined('NEXTSNAPMAIL_VERSION')) {
+	$nextSnapMailVersionFile = dirname(__DIR__) . '/VERSION';
+	$nextSnapMailVersion = is_file($nextSnapMailVersionFile)
+		? trim((string) file_get_contents($nextSnapMailVersionFile))
+		: '';
+	define('NEXTSNAPMAIL_VERSION', $nextSnapMailVersion ?: 'unknown');
+	unset($nextSnapMailVersionFile, $nextSnapMailVersion);
+}

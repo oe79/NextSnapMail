@@ -196,7 +196,7 @@ abstract class Upgrade
 
 				$sTmp = Repository::downloadCore();
 				if (!$sTmp) {
-					throw new \Exception('Failed to download latest SnappyMail');
+					throw new \Exception('Failed to download the latest NextSnapMail core update');
 				}
 
 				if (\class_exists('PharData')) {

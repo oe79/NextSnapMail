@@ -72,6 +72,11 @@
 		"SINCE_3_MONTHS": "3个月以内",
 		"SINCE_6_MONTHS": "半年以内",
 		"SINCE_YEAR": "1年以内",
+		"SCOPE": "搜索范围",
+		"SCOPE_CURRENT": "当前文件夹",
+		"SCOPE_ALL": "所有文件夹",
+		"SCOPE_SUBTREE": "当前文件夹及其子文件夹",
+		"SCOPE_SUBTREE_SHORT": "当前文件夹及子文件夹",
 		"SUBFOLDERS": "子文件夹",
 		"SUBFOLDERS_NONE": "无",
 		"SUBFOLDERS_SUBTREE": "全部",
@@ -86,7 +91,8 @@
 		"SENT_NAME": "已发送邮件",
 		"DRAFTS_NAME": "草稿",
 		"TRASH_NAME": "已删除邮件",
-		"ARCHIVE_NAME": "存档"
+		"ARCHIVE_NAME": "存档",
+		"SHOW_ONLY_UNREAD_FOLDERS": "仅显示包含未读邮件的文件夹"
 	},
 	"IMAP": {
 		"ACL_RIGHTS": "Rights",

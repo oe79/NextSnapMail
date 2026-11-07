@@ -66,9 +66,9 @@ class InstallStep implements IRepairStep
 		}
 
 		$sLoadingDescription = $oConfig->Get('webmail', 'loading_description', '');
-		if (!$sLoadingDescription || 'SnappyMail' === $sLoadingDescription) {
+		if (!$sLoadingDescription || \in_array($sLoadingDescription, ['SnappyMail', 'NextSnapMail - based on SnappyMail'], true)) {
 			$output->info('Set config [webmail]loading_description');
-			$oConfig->Set('webmail', 'loading_description', 'NextSnapMail - based on SnappyMail');
+			$oConfig->Set('webmail', 'loading_description', 'NextSnapMail');
 			$bSave = true;
 		}
 

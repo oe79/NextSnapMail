@@ -1,3 +1,33 @@
+## 0.1.15 – 2026-11-07
+
+### Added
+
+- Add Polish, Russian, Simplified Chinese and Traditional Chinese translations
+  for the new search scopes, unread-folder filter and out-of-office interface.
+- Add consistent, scalable and semantically colored SVG icons to the main
+  message toolbar so its actions remain recognizable in light and dark themes.
+- Offer a protected complete administration view when Safari or iPadOS cannot
+  display the embedded administration interface.
+
+### Changed
+
+- Correct the declared compatibility range to Nextcloud 32–35 and PHP 8.1 or
+  newer. Older Nextcloud releases were inherited from the former integration
+  metadata but are not part of NextSnapMail's maintained compatibility range.
+- Use the complete email address as the initial display name for newly
+  connected Gmail and Google Workspace additional accounts, so multiple Google
+  accounts can be distinguished in the account menu.
+- Establish the integrated administrator session in the top-level Nextcloud
+  settings response for Safari and iPadOS compatibility.
+- Replace the main message toolbar's platform-dependent emoji with the new SVG
+  icon set.
+- Add content-based cache busting for the main webmail stylesheet so regular
+  reloads immediately use updated interface styles without requiring a hard
+  browser refresh.
+- Present the product consistently as NextSnapMail, expose the NextSnapMail app
+  version separately from the embedded SnappyMail 2.38.2 base, and retain the
+  upstream attribution without renaming compatibility-sensitive internals.
+
 ## 0.1.14 – 2026-10-17
 
 ### Added

@@ -2919,6 +2919,8 @@
 	class AdminSettingsAbout /*extends AbstractViewSettings*/ {
 		constructor() {
 			this.version = Settings.app('version');
+			this.nextsnapmailVersion = Settings.app('nextsnapmailVersion') || '';
+			this.snappymailBaseVersion = Settings.app('snappymailBaseVersion') || this.version;
 			this.phpextensions = ko.observableArray();
 
 			addObservablesTo(this, {

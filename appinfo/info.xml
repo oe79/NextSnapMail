@@ -2,8 +2,8 @@
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>nextsnapmail</id>
 	<name>NextSnapMail</name>
-	<summary>A SnappyMail fork focused on integration with Nextcloud</summary>
-	<version>0.1.14</version>
+	<summary>A fast, Nextcloud-focused webmail client</summary>
+	<version>0.1.15</version>
 	<licence>AGPL-3.0-only</licence>
 	<author homepage="https://github.com/oe79">Erhard Scharf</author>
 	<author homepage="https://github.com/the-djmaze/snappymail">SnappyMail contributors</author>
@@ -12,14 +12,14 @@
 	<author>Tab Fitts</author>
 	<author>Nathan Kinkade</author>
 	<author>Pierre-Alain Bandinelli</author>
-	<description><![CDATA[**A SnappyMail fork focused on integration with Nextcloud.**
+	<description><![CDATA[**A fast, Nextcloud-focused webmail client.**
 
 NextSnapMail is an independent community fork of SnappyMail for the Nextcloud
 use case. It is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH.
 
-NextSnapMail is under active development and provided as-is. Please test it
-carefully before using it in production. Installation and use are at your own
-risk.
+NextSnapMail is maintained as an independent, Nextcloud-focused project and is
+provided as-is. Please test new releases carefully before using them in
+production. Installation and use are at your own risk.
 
 **Lightweight & fast email client.**
 
@@ -38,6 +38,8 @@ risk.
 - **Integration with Nextcloud Unified Search**
 - **Integration with other Nextcloud apps** (Contacts, Files and Calendar)
 - **Multiple mail accounts and identities**
+- **Consistent SVG toolbar icons** designed to remain recognizable in light and
+  dark Nextcloud themes
 - **Integrated Gmail / Google OAuth2 login**, including main account setup from
   the personal settings and additional Gmail accounts from the webmail account
   menu
@@ -84,7 +86,7 @@ troubleshooting.
 	<repository>https://github.com/oe79/NextSnapMail</repository>
 	<bugs>https://github.com/oe79/NextSnapMail/issues</bugs>
 	<dependencies>
-		<php min-version="7.4" min-int-size="32" />
+		<php min-version="8.1" min-int-size="32" />
 		<lib>mbstring</lib>
 		<lib>zlib</lib>
 <!--
@@ -107,9 +109,9 @@ troubleshooting.
 		<lib>uuid</lib>
 		<lib>xxtea</lib>
 		<lib>zip</lib>
-		<nextcloud min-version="20" max-version="35" />
+		<nextcloud min-version="32" max-version="35" />
 -->
-		<nextcloud min-version="20" max-version="35" />
+		<nextcloud min-version="32" max-version="35" />
 	</dependencies>
 	<settings>
 		<admin-section>OCA\NextSnapMail\Settings\Section</admin-section>

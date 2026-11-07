@@ -1473,7 +1473,7 @@ class FetchController extends Controller {
 		$oConfig = \RainLoop\Api::Config();
 		$oConfig->Set('webmail', 'app_path', $this->appManager->getAppWebPath('nextsnapmail') . '/app/');
 		$oConfig->Set('webmail', 'allow_languages_on_settings', false);
-		$oConfig->Set('webmail', 'loading_description', 'NextSnapMail - based on SnappyMail');
+		$oConfig->Set('webmail', 'loading_description', 'NextSnapMail');
 		$oConfig->Set('login', 'allow_languages_on_login', false);
 		$oConfig->Set('plugins', 'enable', true);
 		$oConfig->Set('plugins', 'enabled_list', 'nextcloud');

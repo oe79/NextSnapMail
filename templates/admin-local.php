@@ -21,6 +21,10 @@
 
 			<div class="nextsnapmail-integrated-admin" data-nextsnapmail-admin-workspace>
 				<iframe id="nextsnapmail-admin-frame" title="<?php echo \htmlspecialchars($l->t('NextSnapMail administration'), ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'); ?>" src="<?php echo \htmlspecialchars($_['nextsnapmail-integrated-admin-url'], ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'); ?>#/settings/domains" loading="eager"></iframe>
+				<div class="nextsnapmail-admin-frame-fallback" data-nextsnapmail-admin-fallback hidden>
+					<p><?php echo($l->t('The embedded administration could not be displayed. You can open the complete administration view instead.')); ?></p>
+					<a class="button" href="<?php echo \htmlspecialchars($_['nextsnapmail-legacy-admin-url'], ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'); ?>" target="_top"><?php echo($l->t('Open complete administration')); ?></a>
+				</div>
 			</div>
 
 			<section class="nextsnapmail-admin-context" data-nextsnapmail-context="domains" hidden>
