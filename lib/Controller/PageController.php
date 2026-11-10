@@ -144,6 +144,11 @@ class PageController extends Controller
 		$sAppJsMin = $oConfig->Get('debug', 'javascript', false) ? '' : '.min';
 		$sAppCssMin = $oConfig->Get('debug', 'css', false) ? '' : '.min';
 		$sLanguage = $oActions->GetLanguage(false);
+		$sMainCssFile = 'css/' . ($bAdmin ? 'admin' : 'app') . $sAppCssMin . '.css';
+		$sMainCssPath = APP_VERSION_ROOT_PATH . 'static/' . $sMainCssFile;
+		$sMainCssVersion = \is_file($sMainCssPath)
+			? \substr((string) \hash_file('sha256', $sMainCssPath), 0, 16)
+			: (defined('NEXTSNAPMAIL_VERSION') ? NEXTSNAPMAIL_VERSION : APP_VERSION);
 
 		$csp = new ContentSecurityPolicy();
 		$sNonce = $csp->getSnappyMailNonce();
@@ -171,7 +176,11 @@ class PageController extends Controller
 
 		// Nextcloud html encodes, so addHeader('style') is not possible
 //		\OCP\Util::addHeader('style', ['id'=>'app-boot-css'], \file_get_contents(APP_VERSION_ROOT_PATH.'static/css/boot'.$sAppCssMin.'.css'));
-		\OCP\Util::addHeader('link', ['type'=>'text/css','rel'=>'stylesheet','href'=>\RainLoop\Utils::WebStaticPath('css/'.($bAdmin?'admin':'app').$sAppCssMin.'.css')], '');
+		\OCP\Util::addHeader('link', [
+			'type' => 'text/css',
+			'rel' => 'stylesheet',
+			'href' => \RainLoop\Utils::WebStaticPath($sMainCssFile) . '?v=' . \rawurlencode($sMainCssVersion)
+		], '');
 //		\OCP\Util::addHeader('style', ['id'=>'app-theme-style','data-href'=>$params['BaseAppThemeCssLink']], $params['BaseAppThemeCss']);
 
 		$response = new TemplateResponse('nextsnapmail', 'index_embed', $params, $blank ? 'blank' : 'user');

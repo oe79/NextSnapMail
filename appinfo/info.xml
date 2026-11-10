@@ -3,7 +3,7 @@
 	<id>nextsnapmail</id>
 	<name>NextSnapMail</name>
 	<summary>A fast, Nextcloud-focused webmail client</summary>
-	<version>0.1.16</version>
+	<version>0.1.17</version>
 	<licence>AGPL-3.0-only</licence>
 	<author homepage="https://github.com/oe79">Erhard Scharf</author>
 	<author homepage="https://github.com/the-djmaze/snappymail">SnappyMail contributors</author>

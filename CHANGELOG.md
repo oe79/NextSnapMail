@@ -1,3 +1,12 @@
+## 0.1.17 – 2026-11-10
+
+### Fixed
+
+- Add content-based cache busting to the main stylesheet URL used by the
+  embedded Nextcloud user and administration views. Normal browser reloads now
+  request the current toolbar icon styles instead of returning to a previously
+  cached stylesheet after a hard reload.
+
 ## 0.1.16 – 2026-11-09
 
 ### Fixed
