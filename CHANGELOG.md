@@ -1,3 +1,13 @@
+## 0.1.16 – 2026-11-09
+
+### Fixed
+
+- Regenerate the precompressed Brotli and gzip variants of the main webmail
+  stylesheets. Web servers that prefer precompressed assets now deliver the
+  current toolbar icon rules instead of the older stylesheet bundled with
+  0.1.15, so the semantic SVG toolbar icons are visible without requiring a
+  hard browser reload.
+
 ## 0.1.15 – 2026-11-07
 
 ### Added
