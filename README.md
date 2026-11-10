@@ -45,10 +45,12 @@ receive bug reports, hints, and practical feedback, and I will try to help where
 I can. However, there is no guarantee of support, fixes, compatibility, or
 continued maintenance.
 
-## Current release highlights (0.1.15)
+## Current release highlights (0.1.16)
 
 Newest changes first:
 
+- Fixed missing main-toolbar icons on web servers that serve precompressed
+  Brotli or gzip assets by rebuilding those files from the current stylesheet.
 - Added consistent, scalable and semantically colored SVG icons to the main
   message toolbar, replacing platform-dependent emoji while remaining clearly
   visible in light and dark themes.
