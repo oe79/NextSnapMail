@@ -45,10 +45,13 @@ receive bug reports, hints, and practical feedback, and I will try to help where
 I can. However, there is no guarantee of support, fixes, compatibility, or
 continued maintenance.
 
-## Current release highlights (0.1.16)
+## Current release highlights (0.1.17)
 
 Newest changes first:
 
+- Added content-based cache busting to the stylesheet URL used by the embedded
+  Nextcloud views, preventing a normal reload from restoring stale toolbar
+  icon styles after a hard reload.
 - Fixed missing main-toolbar icons on web servers that serve precompressed
   Brotli or gzip assets by rebuilding those files from the current stylesheet.
 - Added consistent, scalable and semantically colored SVG icons to the main
